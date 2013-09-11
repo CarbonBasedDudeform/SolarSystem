@@ -15,9 +15,14 @@ Controls
 The keyboard can currently be used to move the "planet" that is rendered.
 
 'W' - Move Up
+
 'A' - Move Left
+
 'S' - Move Down
+
 'D' - Move Right
 
+
 'Q' - Rotate Anticlockwise
+
 'E' - Rotate Clockwise
