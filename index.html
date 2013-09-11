@@ -13,6 +13,8 @@
                 height: 100%;
             }
         </style>
+				
+		<script type="text/javascript" src="scripts/jquery-2.0.3.min.js"></script>
         <script type="text/javascript" src="scripts/glMatrix-0.9.5.min.js"></script>
         <script type="text/javascript" src="scripts/Planet.js"></script>
         <script type="text/javascript" src="scripts/Controller.js"></script>
@@ -124,7 +126,7 @@
     
     function initBuffers() {
         //generate here
-        planet.generate(5);
+        planet.generate(/*radius: */ 5);
     }
 
 
@@ -145,7 +147,9 @@
         initGL(canvas);
         initShaders();
         initBuffers();
-        
+		
+	    var controller = new Controller();
+		
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
 
