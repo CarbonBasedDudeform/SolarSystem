@@ -26,47 +26,63 @@ function Planet(x,y,z) {
         _buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, _buffer);
         _vertices = [
-            //face one
+            //face 1 - forward facing
 			 0.0,  1.0,  0.0,
             -1.0, -1.0,  0.0,
              1.0, -1.0,  0.0,
-			 //face tw0
+			 //face 2a - right side facing
 			 1.0, -1.0, 0.0,
 			 1.0, -1.0, 1.0,
 			 0.0, 1.0, 0.0,
-			 //face two
+			 //face 2b - right side facing
+			 1.0, -1.0, 1.0,
+			 0.0, 1.0, 1.0,
+			 0.0, 1.0, 0.0,
+			 //face 3a - left side facing
 			 -1.0, -1.0, 0.0,
 			 -1.0, -1.0, 1.0,
 			 0.0, 1.0, 0.0,
-			 //face three
+			 //face 3b - left side facing
+			 -1.0, -1.0, 1.0,
+			 0.0, 1.0, 1.0,
+			 0.0, 1.0, 0.0,
+			 //face 4 - rear side facing
 			 0.0,  1.0,  1.0,
             -1.0, -1.0,  1.0,
              1.0, -1.0,  1.0,
-			 
-			 //reflect in y-axis -- essentially just change the y value from 1.0 to -2.0 and leave the -1.0 alone for now, probably redo this so (0,0) is the centre as that seems more intuitave       	 
-			 //face one
-			 0.0,  -2.0,  0.0,
+			   
+			 //reflect in y-axis
+     	     //face 1 - forward facing
+			 0.0, -3.0,  0.0,
             -1.0, -1.0,  0.0,
              1.0, -1.0,  0.0,
-			 //face tw0
+			 //face 2a - right side facing
 			 1.0, -1.0, 0.0,
 			 1.0, -1.0, 1.0,
-			 0.0, -2.0, 0.0,
-			 //face two
+			 0.0, -3.0, 0.0,
+			 //face 2b - right side facing
+			 1.0, -1.0, 1.0,
+			 0.0, -3.0, 1.0,
+			 0.0, -3.0, 0.0,
+			 //face 3a - left side facing
 			 -1.0, -1.0, 0.0,
 			 -1.0, -1.0, 1.0,
-			 0.0, -2.0, 0.0,
-			 //face three
-			 0.0,  -2.0,  1.0,
+			 0.0, -3.0, 0.0,
+			 //face 3b - left side facing
+			 -1.0, -1.0, 1.0,
+			 0.0, -3.0, 1.0,
+			 0.0, -3.0, 0.0,
+			 //face 4 - rear side facing
+			 0.0,  -3.0,  1.0,
             -1.0, -1.0,  1.0,
-             1.0, -1.0,  1.0,   
+             1.0, -1.0,  1.0,
         ];
 		
 		_vertices = CreateSphere(_vertices);
 		
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(_vertices), gl.STATIC_DRAW);
         _buffer.itemSize = 3; //patch size i.e we're sending 3 sets of coordinates
-        _buffer.numItems = 24; //this can be caluclated as itemSize * number of faces
+        _buffer.numItems = 36;//24; //this can be caluclated as itemSize * number of faces
     };
     
     this.getWorldPosX = function () {
