@@ -15,7 +15,7 @@ function Planet(x,y,z) {
 		//     /-----\
 		//    / \   / \
 		//   /___\ /___\
-		//alert(verts[1]);
+		alert(verts[0] + "," + verts[1] + "," + verts[2]);
 		return verts;
     	}
     
@@ -29,52 +29,36 @@ function Planet(x,y,z) {
         	_vertices = [
             	//face 1 - forward facing
 	    	0.0,  1.0,  0.0,
-               -1.0, -1.0,  0.0,
-            	1.0, -1.0,  0.0,
-	    	//face 2a - right side facing
-	    	1.0, -1.0, 0.0,
+               -1.0, -1.0,  -1.0,
+            	1.0, -1.0,  -1.0,
+	    	//face 2 - right side facing
+	    	1.0, -1.0, -1.0,
 	    	1.0, -1.0, 1.0,
 	    	0.0, 1.0, 0.0,
-	    	//face 2b - right side facing
-	    	1.0, -1.0, 1.0,
-	    	0.0, 1.0, 1.0,
-	    	0.0, 1.0, 0.0,
-	    	//face 3a - left side facing
-	       -1.0, -1.0, 0.0,
+	    	//face 3 - left side facing
+	       -1.0, -1.0, -1.0,
 	       -1.0, -1.0, 1.0,
-	    	0.0, 1.0, 0.0,
-	    	//face 3b - left side facing
-	       -1.0, -1.0, 1.0,
-	    	0.0, 1.0, 1.0,
 	    	0.0, 1.0, 0.0,
 	    	//face 4 - rear side facing
-	    	0.0,  1.0,  1.0,
+	    	0.0,  1.0,  0.0,
                -1.0, -1.0,  1.0,
             	1.0, -1.0,  1.0,
 			   
 	    	//reflect in y-axis
-     	    	//face 1 - forward facing
-	    	0.0, -3.0,  0.0,
-               -1.0, -1.0,  0.0,
-            	1.0, -1.0,  0.0,
-	    	//face 2a - right side facing
-	    	1.0, -1.0, 0.0,
+          	//face 1 - forward facing
+	    	0.0,  -3.0,  0.0,
+               -1.0, -1.0,  -1.0,
+            	1.0, -1.0,  -1.0,
+	    	//face 2 - right side facing
+	    	1.0, -1.0, -1.0,
 	    	1.0, -1.0, 1.0,
 	    	0.0, -3.0, 0.0,
-	    	//face 2b - right side facing
-	    	1.0, -1.0, 1.0,
-	    	0.0, -3.0, 1.0,
-	    	0.0, -3.0, 0.0,
-	    	//face 3a - left side facing
-	       -1.0, -1.0, 0.0,
+	    	//face 3 - left side facing
+	       -1.0, -1.0, -1.0,
 	       -1.0, -1.0, 1.0,
-	    	0.0, -3.0, 0.0,
-	    	//face 3b - left side facing
-	       -1.0, -1.0, 1.0,
-	    	0.0, -3.0, 1.0,
 	    	0.0, -3.0, 0.0,
 	    	//face 4 - rear side facing
-	    	0.0,  -3.0,  1.0,
+	    	0.0,  -3.0,  0.0,
                -1.0, -1.0,  1.0,
             	1.0, -1.0,  1.0,
         	];
@@ -83,7 +67,7 @@ function Planet(x,y,z) {
 		
 	        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(_vertices), gl.STATIC_DRAW);
 	        _buffer.itemSize = 3; //patch size i.e we're sending 3 sets of coordinates
-	    	_buffer.numItems = 36;//24; //this can be caluclated as itemSize * number of faces
+	    	_buffer.numItems = 24;//24; //this can be caluclated as itemSize * number of faces
     	};
     
     	this.getWorldPosX = function () {
