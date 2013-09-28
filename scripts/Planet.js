@@ -15,7 +15,6 @@ function Planet(x,y,z) {
 		//     /-----\
 		//    / \   / \
 		//   /___\ /___\
-		alert(verts[0] + "," + verts[1] + "," + verts[2]);
 		return verts;
     	}
     
