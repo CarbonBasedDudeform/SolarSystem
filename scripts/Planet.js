@@ -15,6 +15,7 @@ function Planet(x,y,z) {
 		//     /-----\
 		//    / \   / \
 		//   /___\ /___\
+<<<<<<< HEAD
 
 			var newVerts = new Array();
 			var patchSize = 9;
@@ -71,6 +72,9 @@ function Planet(x,y,z) {
 			}
 			
 			return newVerts;
+=======
+		return verts;
+>>>>>>> 0ab14a2a4603476d508a55e8da2f8146d3030cca
     	}
     
     	function RecalcCoord(coord, radius) {
