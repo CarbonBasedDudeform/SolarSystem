@@ -20,61 +20,108 @@ function Planet(x,y,z) {
 			for (var i = 0; i < verts.length; i += patchSize)
 			{
 				//bottom left triangle
-				newVerts.push(verts[i+3]  ); //x
-				newVerts.push( (verts[i+4]));
-				newVerts.push( RecalcCoord(((verts[i+5])), radius));
+				var coords = RecalcCoord([verts[i+3], verts[i+4], verts[i+5]], radius);
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
 				
-				newVerts.push( (verts[i+3] + verts[i]) / 2);
-				newVerts.push( (verts[i+4] + verts[i+1]) / 2);
-				newVerts.push( RecalcCoord(((verts[i+5] + verts[i+2]) / 2), radius));
-	
-				newVerts.push( (verts[i+3] + verts[i+6]) / 2);
-				newVerts.push( (verts[i+4] + verts[i+7]) / 2);
-				newVerts.push( RecalcCoord(((verts[i+5] + verts[i+8]) / 2), radius));
-				//top triangle
-				newVerts.push( (verts[i+3] + verts[i]) / 2);
-				newVerts.push( (verts[i+4] + verts[i+1]) / 2);
-				newVerts.push( RecalcCoord(((verts[i+5] + verts[i+2]) / 2), radius));
+				coords = RecalcCoord([(verts[i+3] + verts[i]) / 2, 
+									 (verts[i+4] + verts[i+1]) / 2,
+									 ((verts[i+5] + verts[i+2]) / 2)], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
 				
-				newVerts.push(verts[i]  ); //x
-				newVerts.push( (verts[i+1]));
-				newVerts.push( RecalcCoord(((verts[i+2])), radius));
-	
-				newVerts.push( (verts[i] + verts[i+6]) / 2);
-				newVerts.push( (verts[i+1] + verts[i+7]) / 2);
-				newVerts.push( RecalcCoord(((verts[i+2] + verts[i+8]) / 2), radius));
-				//bottom right triangle
-				newVerts.push( (verts[i+3] + verts[i+6]) / 2);
-				newVerts.push( (verts[i+4] + verts[i+7]) / 2);
-				newVerts.push( RecalcCoord(((verts[i+5] + verts[i+8]) / 2), radius));
+				coords = RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
+									  (verts[i+4] + verts[i+7]) / 2,
+									 ((verts[i+5] + verts[i+8]) / 2)], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
 				
-				newVerts.push( (verts[i] + verts[i+6]) /2 ); //x
-				newVerts.push( (verts[i+1] + verts[i+7]) /2 );
-				newVerts.push( RecalcCoord(((verts[i+2] + verts[i+8]) /2), radius));
-	
-				newVerts.push(verts[i+6]);
-				newVerts.push(verts[i+7]);
-				newVerts.push(RecalcCoord((verts[i+8]), radius));
-				//middle triangle
-				newVerts.push( (verts[i+3] + verts[i]) / 2);
-				newVerts.push( (verts[i+4] + verts[i+1]) / 2);
-				newVerts.push( RecalcCoord(((verts[i+5] + verts[i+2]) / 2), radius));
+				coords = RecalcCoord([(verts[i+3] + verts[i]) / 2, 
+									  (verts[i+4] + verts[i+1]) / 2,
+									 ((verts[i+5] + verts[i+2]) / 2)], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
 				
-				newVerts.push( (verts[i] + verts[i+6]) /2 ); //x
-				newVerts.push( (verts[i+1] + verts[i+7]) /2 );
-				newVerts.push( RecalcCoord(((verts[i+2] + verts[i+8]) /2), radius));
-	
-				newVerts.push( (verts[i+3] + verts[i+6]) / 2);
-				newVerts.push( (verts[i+4] + verts[i+7]) / 2);
-				newVerts.push( RecalcCoord(((verts[i+5] + verts[i+8]) / 2), radius));
+				coords = RecalcCoord([verts[i], 
+									 verts[i+1],
+									 verts[i+2]], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
+				
+				coords = RecalcCoord([(verts[i] + verts[i+6]) / 2, 
+									 (verts[i+1] + verts[i+7]) / 2,
+									 ((verts[i+2] + verts[i+8]) / 2)], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
+				
+				coords = RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
+									  (verts[i+4] + verts[i+7]) / 2,
+									  (verts[i+5] + verts[i+8]) / 2], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
+				
+				coords = RecalcCoord([(verts[i] + verts[i+6]) / 2, 
+									  (verts[i+1] + verts[i+7]) / 2 ,
+									  (verts[i+2] + verts[i+8]) /2], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
+				
+				coords = RecalcCoord([verts[i+6], 
+									  verts[i+7],
+									  verts[i+8]], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
+				
+				coords = RecalcCoord([(verts[i+3] + verts[i]) / 2, 
+									  (verts[i+4] + verts[i+1]) / 2,
+									  (verts[i+5] + verts[i+2]) / 2], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
+				
+				coords = RecalcCoord([(verts[i] + verts[i+6]) / 2, 
+									  (verts[i+1] + verts[i+7]) / 2,
+									  (verts[i+2] + verts[i+8]) / 2], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
+				
+				coords = RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
+									  (verts[i+4] + verts[i+7]) / 2,
+									  (verts[i+5] + verts[i+8]) / 2], radius);
+									 
+				newVerts.push(coords[0]); //x
+				newVerts.push(coords[1]);
+				newVerts.push(coords[2]);
 			}
-			
 			return newVerts;
 
     	}
     
-    	function RecalcCoord(coord, radius) {
-			return coord;
+    	function RecalcCoord(coords, radius) {
+			var result = [];
+			var dist = Math.sqrt(coords[0]*coords[0] + coords[1]*coords[1] + coords[2]*coords[2]);
+			if (dist >= radius) alert(dist);
+			return coords;
     	}
     
 	var _tesselationDepth = 1;
