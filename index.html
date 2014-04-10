@@ -41,6 +41,18 @@
 
         <script type="text/javascript">
 
+            //2 = 0.1AU
+    var planets = new Array();
+    planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*sun*/
+    planets.push(new Planet( /*location(x,z,y): */ -8,  0, 0, /*orbit rotation (x,y)*/1, 1)); /*mercury*/
+    planets.push(new Planet( /*location(x,z,y): */ -14, 0, 0, /*orbit rotation (x,y)*/0, 0)); /*venus*/
+    planets.push(new Planet( /*location(x,z,y): */ -20, 0, 0, /*orbit rotation (x,y)*/0, 0)); /*earth*/
+    planets.push(new Planet( /*location(x,z,y): */ -30, 0, 0, /*orbit rotation (x,y)*/0,     0)); /*jupiter*/
+    planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*saturn*/
+    planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*uranus*/
+    planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*neptune*/
+
+
         var gl;
         function initGL(canvas) {
             try {
@@ -121,16 +133,9 @@
         gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
     }
-    
-    var planets = new Array(new Planet(0, 0, -20), /*sun*/
-                            new Planet(0, 5, -25), /*mercury*/
-                            new Planet(0, 6, -30), /*venus*/
-                            new Planet(0, 7, -35), /*earth*/
-                            new Planet(0, 8, -40), /*jupiter*/
-                            new Planet(0, 9, -45), /*saturn*/
-                            new Planet(0, 10, -50), /*uranus*/
-                            new Planet(0, 11, -55) /*neptune*/);
-    
+
+
+
     function initBuffers() {
         //generate here
         planets.forEach(function(i) {
@@ -139,16 +144,19 @@
     }
 
 
+    var time = 0;
     function drawScene() {
+        time += 0.03;
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
-
         mat4.identity(mvMatrix);
+        mat4.translate(mvMatrix, [0, -10, -100]);
+        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
 
         //draw here
         planets.forEach(function(i){
+            i.orbit(time);
             i.draw(pMatrix, mvMatrix);
         });
     }

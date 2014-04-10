@@ -1,9 +1,25 @@
-function Planet(x,y,z) {
+function Planet( x,y,z, oX, oZ) {
 	this.worldX = x;
     this.worldY = y;
     this.worldZ = z;
+
+
+   	this._orbitX = oX;
+   	this._orbitZ = oZ;
+	this._speed = 0.5;
+
+   	this.orbit = function(t)
+   	{
+   		//orbit in a circle in XY plane only
+   		//can overide this to give more specialised/eccentric orbits in the future
+   		//but because there are no complex orbits in the solar system just gonna fake it and move everything around in a circle 
+   		this.worldX += ( ( Math.sin(t) * this._orbitX ) * this._speed );
+   		//alert(this._orbitX);
+   		this.worldZ += ( ( Math.cos(t) * this._orbitZ ) * this._speed );
+   	}
     
-    	function CreateSphere(verts, radius) { 
+    this.CreateSphere = function(verts, radius) 
+    { 
 		//tesselate triangle faces
 		//aka subdivide each triangle face into 4 triangle faces
 		//like so:
@@ -13,104 +29,105 @@ function Planet(x,y,z) {
 		//    / \   / \
 		//   /___\ /___\
 			
-			var patchSize = 9;
-			var newVerts = new Array();
-			for (var i = 0; i < verts.length; i += patchSize)
-			{
+		var patchSize = 9;
+		var newVerts = new Array();
+		for (var i = 0; i < verts.length; i += patchSize)
+		{
 				//bottom left triangle
-				var coords = RecalcCoord([verts[i+3], verts[i+4], verts[i+5]], radius);
+				var coords = this.RecalcCoord([verts[i+3], verts[i+4], verts[i+5]], radius);
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 			
-				coords = RecalcCoord([(verts[i+3] + verts[i]) / 2, 
+				coords = this.RecalcCoord([(verts[i+3] + verts[i]) / 2, 
 									 (verts[i+4] + verts[i+1]) / 2,
 									 ((verts[i+5] + verts[i+2]) / 2)], radius);		
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
+				coords = this.RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
 									  (verts[i+4] + verts[i+7]) / 2,
 									 ((verts[i+5] + verts[i+8]) / 2)], radius);			 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([(verts[i+3] + verts[i]) / 2, 
+				coords = this.RecalcCoord([(verts[i+3] + verts[i]) / 2, 
 									  (verts[i+4] + verts[i+1]) / 2,
 									 ((verts[i+5] + verts[i+2]) / 2)], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([verts[i], 
+				coords = this.RecalcCoord([verts[i], 
 									 verts[i+1],
 									 verts[i+2]], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([(verts[i] + verts[i+6]) / 2, 
+				coords = this.RecalcCoord([(verts[i] + verts[i+6]) / 2, 
 									 (verts[i+1] + verts[i+7]) / 2,
 									 ((verts[i+2] + verts[i+8]) / 2)], radius);				 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
+				coords = this.RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
 									  (verts[i+4] + verts[i+7]) / 2,
 									  (verts[i+5] + verts[i+8]) / 2], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([(verts[i] + verts[i+6]) / 2, 
+				coords = this.RecalcCoord([(verts[i] + verts[i+6]) / 2, 
 									  (verts[i+1] + verts[i+7]) / 2 ,
 									  (verts[i+2] + verts[i+8]) /2], radius);				 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([verts[i+6], 
+				coords = this.RecalcCoord([verts[i+6], 
 									  verts[i+7],
 									  verts[i+8]], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([(verts[i+3] + verts[i]) / 2, 
+				coords = this.RecalcCoord([(verts[i+3] + verts[i]) / 2, 
 									  (verts[i+4] + verts[i+1]) / 2,
 									  (verts[i+5] + verts[i+2]) / 2], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([(verts[i] + verts[i+6]) / 2, 
+				coords = this.RecalcCoord([(verts[i] + verts[i+6]) / 2, 
 									  (verts[i+1] + verts[i+7]) / 2,
 									  (verts[i+2] + verts[i+8]) / 2], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
-				coords = RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
+				coords = this.RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
 									  (verts[i+4] + verts[i+7]) / 2,
 									  (verts[i+5] + verts[i+8]) / 2], radius);				 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
-			}
-			return newVerts;
+		}
+		return newVerts;
 
-    	}
+    }
     
-    	function RecalcCoord(coords, radius) {
+    	this.RecalcCoord = function(coords, radius) 
+    	{
 			var result = [];
-			var dist = VectorLength(coords[0], coords[1], coords[2]);
+			var dist = this.VectorLength(coords[0], coords[1], coords[2]);
 			if (dist <= radius) {
-				var normalizedX = Normalize(coords[0], dist);
-				var normalizedY = Normalize(coords[1], dist);
-				var normalizedZ = Normalize(coords[2], dist);
+				var normalizedX = this.Normalize(coords[0], dist);
+				var normalizedY = this.Normalize(coords[1], dist);
+				var normalizedZ = this.Normalize(coords[2], dist);
 				result.push(normalizedX * _radius);
 				result.push(normalizedY * _radius);
 				result.push(normalizedZ * _radius);
@@ -120,11 +137,12 @@ function Planet(x,y,z) {
 			return result;
     	}
 		
-		function VectorLength(vectorX, vectorY, vectorZ) {
+		this.VectorLength = function(vectorX, vectorY, vectorZ) {
 			return Math.sqrt( (vectorX*vectorX ) + (vectorY * vectorY) + (vectorZ * vectorZ) );
 		}
 		
-		function Normalize(vector, Distance) {
+		this.Normalize = function(vector, Distance) 
+		{
 			if (Distance == 0) {
 				alert("Divide by Zero in Normalize function");
 				return -1;
@@ -180,7 +198,7 @@ function Planet(x,y,z) {
 		
 			for (var i = 0; i < _tessellationDepth; i++)
 			{
-				_vertices = CreateSphere(_vertices, radius);
+				_vertices = this.CreateSphere(_vertices, radius);
 			}	
 		
 	        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(_vertices), gl.STATIC_DRAW);
@@ -189,53 +207,25 @@ function Planet(x,y,z) {
 			_radius = radius;
 	   	};
     
-    	this.getWorldPosX = function () {
-        	return this.worldX;
-    	}
+    this.getWorldPosX = function () {
+       	return this.worldX;
+   	}
     
-    	this.getWorldPosY = function () {
-	    	return this.worldY;
-    	}
+   	this.getWorldPosY = function () {
+	   	return this.worldY;
+   	}
     
 	this.getWorldPosZ = function () {
-    		return this.worldZ;
-    	}
-	
-	var _speed = 0.1;
-	
-	this.moveLeft = function() {
-		this.worldX -= _speed;
-	}
-	
-	this.moveRight = function() {
-		this.worldX += _speed;
-	}
-	
-	this.moveUp = function() {
-		this.worldY += _speed;
-	}
-	
-	this.moveDown = function() {
-		this.worldY -= _speed;
-	}
-	
-	var _rotation = 0;
-	
-	this.rotateClockwise = function() {
-		_rotation += _speed;
-	}
-	
-	this.rotateAnticlockwise = function() {
-		_rotation -= _speed;
-	}
+    	return this.worldZ;
+    }
     
-    	this.draw = function (pMatrix, mvMatrix) {
-        	mat4.translate(mvMatrix, [this.worldX, this.worldY, this.worldZ]);
-		mat4.rotate(mvMatrix, _rotation, [0, 1, 0]);
-        	gl.bindBuffer(gl.ARRAY_BUFFER, _buffer);
-        	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, _buffer.itemSize, gl.FLOAT, false, 0, 0);
-        	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-        	gl.drawArrays(gl.TRIANGLES, 0, _buffer.numItems);
-    	}
+    this.draw = function (pMatrix, mvMatrix) {
+       	mat4.translate(mvMatrix, [this.worldX, this.worldY, this.worldZ]);
+       	gl.bindBuffer(gl.ARRAY_BUFFER, _buffer);
+       	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, _buffer.itemSize, gl.FLOAT, false, 0, 0);
+       	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+       	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+       	gl.drawArrays(gl.TRIANGLES, 0, _buffer.numItems);
+       	mat4.translate(mvMatrix, [-this.worldX, -this.worldY, -this.worldZ]);
+   	}
 }

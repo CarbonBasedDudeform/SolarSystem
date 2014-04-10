@@ -2,30 +2,19 @@ function Controller() {
 	jQuery(window).keypress(function(e) {
 		var pressed = String.fromCharCode(e.which)
 					  .toLowerCase();
-		
+		/*
 		if (pressed == 'a')
-			planets.forEach(function(i){
-				i.moveLeft();
-			});
+			//move camera left
 		else if (pressed == 'd')
-			planets.forEach(function(i){
-				i.moveRight();
-			});
+			//move camera right
 		else if (pressed == 'w')
-			planets.forEach(function(i){
-				i.moveUp();
-			});
+			//move camera up
 		else if (pressed == 's')
-			planets.forEach(function(i){
-				i.moveDown();
-			});
+			//move camera down
 		else if (pressed == 'q')
-			planets.forEach(function(i){
-				i.rotateAnticlockwise();
-			});
+			//rotate anti clockwise
 		else if (pressed == 'e')
-			planets.forEach(function(i){
-				i.rotateClockwise();
-			});
+			//rotate clockwise
+		*/
 	});
 }
