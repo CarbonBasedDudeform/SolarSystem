@@ -4,16 +4,28 @@ function Controller() {
 					  .toLowerCase();
 		
 		if (pressed == 'a')
-			planet.moveLeft();
+			planets.forEach(function(i){
+				i.moveLeft();
+			});
 		else if (pressed == 'd')
-			planet.moveRight();
+			planets.forEach(function(i){
+				i.moveRight();
+			});
 		else if (pressed == 'w')
-			planet.moveUp();
+			planets.forEach(function(i){
+				i.moveUp();
+			});
 		else if (pressed == 's')
-			planet.moveDown();
+			planets.forEach(function(i){
+				i.moveDown();
+			});
 		else if (pressed == 'q')
-			planet.rotateAnticlockwise();
+			planets.forEach(function(i){
+				i.rotateAnticlockwise();
+			});
 		else if (pressed == 'e')
-			planet.rotateClockwise();
+			planets.forEach(function(i){
+				i.rotateClockwise();
+			});
 	});
 }

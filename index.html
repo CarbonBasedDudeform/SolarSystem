@@ -122,11 +122,14 @@
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
     }
     
-    var planet = new Planet(0, 0, -5);
+    var planets = new Array(new Planet(0, 0, -50),
+                            new Planet(0, 1, -49.9));
     
     function initBuffers() {
         //generate here
-        planet.generate(/*radius: */ 10);
+        planets.forEach(function(i) {
+            i.generate(/*radius: */ 5);
+        });
     }
 
 
@@ -139,7 +142,9 @@
         mat4.identity(mvMatrix);
 
         //draw here
-        planet.draw(pMatrix, mvMatrix);
+        planets.forEach(function(i){
+            i.draw(pMatrix, mvMatrix);
+        });
     }
 
     function start() {
