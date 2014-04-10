@@ -149,7 +149,7 @@ function Planet(x,y,z) {
     
 	    var _buffer;
 		var _vertices;
-		var _tesselationDepth = 5;
+		var _tessellationDepth = 5;
 		var _radius = 1;
 		
     	this.generate = function (radius) {
@@ -192,7 +192,7 @@ function Planet(x,y,z) {
             	1.0, -1.0,  1.0,
         	];
 		
-			for (var i = 0; i < _tesselationDepth; i++)
+			for (var i = 0; i < _tessellationDepth; i++)
 			{
 				_vertices = CreateSphere(_vertices, radius);
 			}	
