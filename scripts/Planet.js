@@ -187,9 +187,7 @@ function Planet(x,y,z) {
 	        _buffer.itemSize = 3; //patch size i.e we're sending 3 sets of coordinates
 	    	_buffer.numItems = _vertices.length/3;//24; //this can be caluclated as itemSize * number of faces
 			_radius = radius;
-
-			alert("X: " + this.worldX + " Y: " + this.worldY + " Z: " + this.worldZ);
-    	};
+	   	};
     
     	this.getWorldPosX = function () {
         	return this.worldX;

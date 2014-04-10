@@ -122,8 +122,14 @@
         gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
     }
     
-    var planets = new Array(new Planet(0, 0, -50),
-                            new Planet(0, 1, -49.9));
+    var planets = new Array(new Planet(0, 0, -20), /*sun*/
+                            new Planet(0, 5, -25), /*mercury*/
+                            new Planet(0, 6, -30), /*venus*/
+                            new Planet(0, 7, -35), /*earth*/
+                            new Planet(0, 8, -40), /*jupiter*/
+                            new Planet(0, 9, -45), /*saturn*/
+                            new Planet(0, 10, -50), /*uranus*/
+                            new Planet(0, 11, -55) /*neptune*/);
     
     function initBuffers() {
         //generate here
@@ -137,7 +143,7 @@
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
 
         mat4.identity(mvMatrix);
 
