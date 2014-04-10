@@ -18,98 +18,84 @@ function Planet(x,y,z) {
 			for (var i = 0; i < verts.length; i += patchSize)
 			{
 				//bottom left triangle
-				alert("befre recal newVert: " + newVerts[0]);
 				var coords = RecalcCoord([verts[i+3], verts[i+4], verts[i+5]], radius);
-				alert("after reca coord: " + coords[0]);
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
-				
-				alert("newVert: " + newVerts[0]);
+			
 				coords = RecalcCoord([(verts[i+3] + verts[i]) / 2, 
 									 (verts[i+4] + verts[i+1]) / 2,
-									 ((verts[i+5] + verts[i+2]) / 2)], radius);
-									 
+									 ((verts[i+5] + verts[i+2]) / 2)], radius);		
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
 									  (verts[i+4] + verts[i+7]) / 2,
-									 ((verts[i+5] + verts[i+8]) / 2)], radius);
-									 
+									 ((verts[i+5] + verts[i+8]) / 2)], radius);			 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([(verts[i+3] + verts[i]) / 2, 
 									  (verts[i+4] + verts[i+1]) / 2,
-									 ((verts[i+5] + verts[i+2]) / 2)], radius);
-									 
+									 ((verts[i+5] + verts[i+2]) / 2)], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([verts[i], 
 									 verts[i+1],
-									 verts[i+2]], radius);
-									 
+									 verts[i+2]], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([(verts[i] + verts[i+6]) / 2, 
 									 (verts[i+1] + verts[i+7]) / 2,
-									 ((verts[i+2] + verts[i+8]) / 2)], radius);
-									 
+									 ((verts[i+2] + verts[i+8]) / 2)], radius);				 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
 									  (verts[i+4] + verts[i+7]) / 2,
-									  (verts[i+5] + verts[i+8]) / 2], radius);
-									 
+									  (verts[i+5] + verts[i+8]) / 2], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([(verts[i] + verts[i+6]) / 2, 
 									  (verts[i+1] + verts[i+7]) / 2 ,
-									  (verts[i+2] + verts[i+8]) /2], radius);
-									 
+									  (verts[i+2] + verts[i+8]) /2], radius);				 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([verts[i+6], 
 									  verts[i+7],
-									  verts[i+8]], radius);
-									 
+									  verts[i+8]], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([(verts[i+3] + verts[i]) / 2, 
 									  (verts[i+4] + verts[i+1]) / 2,
-									  (verts[i+5] + verts[i+2]) / 2], radius);
-									 
+									  (verts[i+5] + verts[i+2]) / 2], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([(verts[i] + verts[i+6]) / 2, 
 									  (verts[i+1] + verts[i+7]) / 2,
-									  (verts[i+2] + verts[i+8]) / 2], radius);
-									 
+									  (verts[i+2] + verts[i+8]) / 2], radius);					 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
 				
 				coords = RecalcCoord([(verts[i+3] + verts[i+6]) / 2, 
 									  (verts[i+4] + verts[i+7]) / 2,
-									  (verts[i+5] + verts[i+8]) / 2], radius);
-									 
+									  (verts[i+5] + verts[i+8]) / 2], radius);				 
 				newVerts.push(coords[0]); //x
 				newVerts.push(coords[1]);
 				newVerts.push(coords[2]);
