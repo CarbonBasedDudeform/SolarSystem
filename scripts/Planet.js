@@ -6,16 +6,21 @@ function Planet( x,y,z, oX, oZ) {
 
    	this._orbitX = oX;
    	this._orbitZ = oZ;
-	this._speed = 0.5;
+	this._speed = 1;
+
+	this.setSpeed = function(v)
+	{
+		this._speed = v;
+	}
 
    	this.orbit = function(t)
    	{
    		//orbit in a circle in XY plane only
    		//can overide this to give more specialised/eccentric orbits in the future
    		//but because there are no complex orbits in the solar system just gonna fake it and move everything around in a circle 
-   		this.worldX += ( ( Math.sin(t) * this._orbitX ) * this._speed );
+   		this.worldX = ( ( Math.sin(t * this._speed ) * this._orbitX ));
    		//alert(this._orbitX);
-   		this.worldZ += ( ( Math.cos(t) * this._orbitZ ) * this._speed );
+   		this.worldZ = ( ( Math.cos(t * this._speed ) * this._orbitZ ));
    	}
     
     this.CreateSphere = function(verts, radius) 
@@ -128,9 +133,9 @@ function Planet( x,y,z, oX, oZ) {
 				var normalizedX = this.Normalize(coords[0], dist);
 				var normalizedY = this.Normalize(coords[1], dist);
 				var normalizedZ = this.Normalize(coords[2], dist);
-				result.push(normalizedX * _radius);
-				result.push(normalizedY * _radius);
-				result.push(normalizedZ * _radius);
+				result.push(normalizedX * radius);
+				result.push(normalizedY * radius);
+				result.push(normalizedZ * radius);
 			} else {
 				result = coords;
 			}
@@ -219,12 +224,14 @@ function Planet( x,y,z, oX, oZ) {
     	return this.worldZ;
     }
     
-    this.draw = function (pMatrix, mvMatrix) {
+    this.draw = function (pMatrix, mvMatrix, shader) {
+    	gl.useProgram(shader);
+        gl.enableVertexAttribArray(shader.vertexPositionAttribute);
        	mat4.translate(mvMatrix, [this.worldX, this.worldY, this.worldZ]);
        	gl.bindBuffer(gl.ARRAY_BUFFER, _buffer);
-       	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, _buffer.itemSize, gl.FLOAT, false, 0, 0);
-       	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-       	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+       	gl.vertexAttribPointer(shader.vertexPositionAttribute, _buffer.itemSize, gl.FLOAT, false, 0, 0);
+       	gl.uniformMatrix4fv(shader.pMatrixUniform, false, pMatrix);
+       	gl.uniformMatrix4fv(shader.mvMatrixUniform, false, mvMatrix);
        	gl.drawArrays(gl.TRIANGLES, 0, _buffer.numItems);
        	mat4.translate(mvMatrix, [-this.worldX, -this.worldY, -this.worldZ]);
    	}

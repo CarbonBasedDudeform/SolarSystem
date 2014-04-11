@@ -27,6 +27,78 @@
             }
         </script>
 
+        <script id="sun-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(1.0* (gl_FragCoord.x / 218.0), 0.5 * (gl_FragCoord.y / 218.0), 0.0, 1.0);
+            }
+        </script>
+
+        <script id="mercury-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(0.4, 0.3, 0.2, 1.0);
+            }
+        </script>
+
+        <script id="venus-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(0.4, 0.3, 0.2, 1.0);
+            }
+        </script>
+
+        <script id="earth-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(0.1, 0.2, 0.4, 1.0);
+            }
+        </script>
+
+        <script id="mars-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(0.9, 0.4, 0.2, 1.0);
+            }
+        </script>
+
+        <script id="jupiter-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(0.7, 0.6, 0.4, 1.0);
+            }
+        </script>
+
+        <script id="saturn-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(0.9, 0.6, 0.4, 1.0);
+            }
+        </script>
+
+        <script id="uranus-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(0.5, 0.7, 0.8, 1.0);
+            }
+        </script>
+
+        <script id="neptune-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            
+            void main(void) {
+                gl_FragColor = vec4(0.2, 0.4, 0.6, 1.0);
+            }
+        </script>
+
         <script id="shader-vs" type="x-shader/x-vertex">
             attribute vec3 aVertexPosition;
 
@@ -44,14 +116,22 @@
             //2 = 0.1AU
     var planets = new Array();
     planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*sun*/
-    planets.push(new Planet( /*location(x,z,y): */ -8,  0, 0, /*orbit rotation (x,y)*/1, 1)); /*mercury*/
-    planets.push(new Planet( /*location(x,z,y): */ -14, 0, 0, /*orbit rotation (x,y)*/0, 0)); /*venus*/
-    planets.push(new Planet( /*location(x,z,y): */ -20, 0, 0, /*orbit rotation (x,y)*/0, 0)); /*earth*/
-    planets.push(new Planet( /*location(x,z,y): */ -30, 0, 0, /*orbit rotation (x,y)*/0,     0)); /*jupiter*/
-    planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*saturn*/
-    planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*uranus*/
-    planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*neptune*/
-
+    planets.push(new Planet( /*location(x,z,y): */ -8 -218 /*suns radius*/,  0, 0, /*orbit rotation (x,y)*/225, 225)); /*mercury*/
+    planets.push(new Planet( /*location(x,z,y): */ -14 -218 -22, 0, 0, /*orbit rotation (x,y)*/240, 240)); /*venus*/
+    planets.push(new Planet( /*location(x,z,y): */ -20 -218 -22 -18, 0, 0, /*orbit rotation (x,y)*/250, 250)); /*earth*/
+    planets.push(new Planet( /*location(x,z,y): */ -30 -218 -22 -18 -8, 0, 0, /*orbit rotation (x,y)*/ 280, 280)); /*mars*/
+    planets.push(new Planet( /*location(x,z,y): */ -104 -218 -22 -18 -8 -8, 0, 0, /*orbit rotation (x,y)*/350,     350)); /*jupiter*/
+    planets.push(new Planet( /*location(x,z,y): */  -190 -218 -22 -18 -8 -8 -2,   0, 0, /*orbit rotation (x,y)*/450,     450)); /*saturn*/
+    planets.push(new Planet( /*location(x,z,y): */  -384 -218 -22 -18 -8 -8 -2 -2,  0, 0, /*orbit rotation (x,y)*/600,     600)); /*uranus*/
+    planets.push(new Planet( /*location(x,z,y): */  -600 -218 -22 -18 -8 -8 -2 -2 -1,  0, 0, /*orbit rotation (x,y)*/800,     800)); /*neptune*/
+    planets[1].setSpeed(3.33);
+    planets[2].setSpeed(1.4);
+    planets[3].setSpeed(1);
+    planets[4].setSpeed(0.55);
+    planets[5].setSpeed(0.083);
+    planets[6].setSpeed(0.034);
+    planets[7].setSpeed(0.0119);
+    planets[8].setSpeed(0.00605);
 
         var gl;
         function initGL(canvas) {
@@ -103,6 +183,26 @@
 
     var shaderProgram;
 
+    function setupShader(shdaerProgramName, FragmentShaderIDName) //currently uses the same vertex shader for all, would need to be updated if this changes
+    {
+        var fragmentShader = getShader(gl, FragmentShaderIDName);
+        var vertexShader = getShader(gl, "shader-vs");
+
+        shaderProgramName = gl.createProgram();
+        gl.attachShader(shaderProgramName, vertexShader);
+        gl.attachShader(shaderProgramName, fragmentShader);
+        gl.linkProgram(shaderProgramName);
+
+        shaderProgramName.vertexPositionAttribute = gl.getAttribLocation(shaderProgramName, "aVertexPosition");
+
+        shaderProgramName.pMatrixUniform = gl.getUniformLocation(shaderProgramName, "uPMatrix");
+        shaderProgramName.mvMatrixUniform = gl.getUniformLocation(shaderProgramName, "uMVMatrix");
+
+        if (!gl.getProgramParameter(shaderProgramName, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+    }
+
     function initShaders() {
         var fragmentShader = getShader(gl, "shader-fs");
         var vertexShader = getShader(gl, "shader-vs");
@@ -113,6 +213,162 @@
         gl.linkProgram(shaderProgram);
 
         if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+        sunfragmentShader = getShader(gl, "sun-fs");
+        sunvertexShader = getShader(gl, "shader-vs");
+
+        sunshaderProgram = gl.createProgram();
+        gl.attachShader(sunshaderProgram, sunvertexShader);
+        gl.attachShader(sunshaderProgram, sunfragmentShader);
+        gl.linkProgram(sunshaderProgram);
+
+        sunshaderProgram.vertexPositionAttribute = gl.getAttribLocation(sunshaderProgram, "aVertexPosition");
+        gl.enableVertexAttribArray(sunshaderProgram.vertexPositionAttribute);
+
+        sunshaderProgram.pMatrixUniform = gl.getUniformLocation(sunshaderProgram, "uPMatrix");
+        sunshaderProgram.mvMatrixUniform = gl.getUniformLocation(sunshaderProgram, "uMVMatrix");
+
+        if (!gl.getProgramParameter(sunshaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        mercuryfragmentShader = getShader(gl, "mercury-fs");
+        mercuryvertexShader = getShader(gl, "shader-vs");
+
+        mercuryshaderProgram = gl.createProgram();
+        gl.attachShader(mercuryshaderProgram, mercuryvertexShader);
+        gl.attachShader(mercuryshaderProgram, mercuryfragmentShader);
+        gl.linkProgram(mercuryshaderProgram);
+
+        mercuryshaderProgram.vertexPositionAttribute = gl.getAttribLocation(mercuryshaderProgram, "aVertexPosition");
+
+        mercuryshaderProgram.pMatrixUniform = gl.getUniformLocation(mercuryshaderProgram, "uPMatrix");
+        mercuryshaderProgram.mvMatrixUniform = gl.getUniformLocation(mercuryshaderProgram, "uMVMatrix");
+
+        if (!gl.getProgramParameter(mercuryshaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        venusfragmentShader = getShader(gl, "venus-fs");
+        venusvertexShader = getShader(gl, "shader-vs");
+
+        venusshaderProgram = gl.createProgram();
+        gl.attachShader(venusshaderProgram, venusvertexShader);
+        gl.attachShader(venusshaderProgram, venusfragmentShader);
+        gl.linkProgram(venusshaderProgram);
+
+        venusshaderProgram.vertexPositionAttribute = gl.getAttribLocation(venusshaderProgram, "aVertexPosition");
+
+        venusshaderProgram.pMatrixUniform = gl.getUniformLocation(venusshaderProgram, "uPMatrix");
+        venusshaderProgram.mvMatrixUniform = gl.getUniformLocation(venusshaderProgram, "uMVMatrix");
+
+        if (!gl.getProgramParameter(venusshaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+
+        earthfragmentShader = getShader(gl, "earth-fs");
+        earthvertexShader = getShader(gl, "shader-vs");
+
+        earthshaderProgram = gl.createProgram();
+        gl.attachShader(earthshaderProgram, earthvertexShader);
+        gl.attachShader(earthshaderProgram, earthfragmentShader);
+        gl.linkProgram(earthshaderProgram);
+
+        earthshaderProgram.vertexPositionAttribute = gl.getAttribLocation(earthshaderProgram, "aVertexPosition");
+
+        earthshaderProgram.pMatrixUniform = gl.getUniformLocation(earthshaderProgram, "uPMatrix");
+        earthshaderProgram.mvMatrixUniform = gl.getUniformLocation(earthshaderProgram, "uMVMatrix");
+
+        if (!gl.getProgramParameter(earthshaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        //TODO: Refactor all these repetative lines of code: function along the lines of function(shaderProgramName, FragmentShaderID) should work
+        
+        marsfragmentShader = getShader(gl, "mars-fs");
+        marsvertexShader = getShader(gl, "shader-vs");
+
+        marsshaderProgram = gl.createProgram();
+        gl.attachShader(marsshaderProgram, marsvertexShader);
+        gl.attachShader(marsshaderProgram, marsfragmentShader);
+        gl.linkProgram(marsshaderProgram);
+
+        marsshaderProgram.vertexPositionAttribute = gl.getAttribLocation(marsshaderProgram, "aVertexPosition");
+
+        marsshaderProgram.pMatrixUniform = gl.getUniformLocation(marsshaderProgram, "uPMatrix");
+        marsshaderProgram.mvMatrixUniform = gl.getUniformLocation(marsshaderProgram, "uMVMatrix");
+
+        if (!gl.getProgramParameter(marsshaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        jupiterfragmentShader = getShader(gl, "jupiter-fs");
+        jupitervertexShader = getShader(gl, "shader-vs");
+
+        jupitershaderProgram = gl.createProgram();
+        gl.attachShader(jupitershaderProgram, jupitervertexShader);
+        gl.attachShader(jupitershaderProgram, jupiterfragmentShader);
+        gl.linkProgram(jupitershaderProgram);
+
+        jupitershaderProgram.vertexPositionAttribute = gl.getAttribLocation(jupitershaderProgram, "aVertexPosition");
+
+        jupitershaderProgram.pMatrixUniform = gl.getUniformLocation(jupitershaderProgram, "uPMatrix");
+        jupitershaderProgram.mvMatrixUniform = gl.getUniformLocation(jupitershaderProgram, "uMVMatrix");
+
+        if (!gl.getProgramParameter(jupitershaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        saturnfragmentShader = getShader(gl, "saturn-fs");
+        saturnvertexShader = getShader(gl, "shader-vs");
+
+        saturnshaderProgram = gl.createProgram();
+        gl.attachShader(saturnshaderProgram, saturnvertexShader);
+        gl.attachShader(saturnshaderProgram, saturnfragmentShader);
+        gl.linkProgram(saturnshaderProgram);
+
+        saturnshaderProgram.vertexPositionAttribute = gl.getAttribLocation(saturnshaderProgram, "aVertexPosition");
+
+        saturnshaderProgram.pMatrixUniform = gl.getUniformLocation(saturnshaderProgram, "uPMatrix");
+        saturnshaderProgram.mvMatrixUniform = gl.getUniformLocation(saturnshaderProgram, "uMVMatrix");
+
+        if (!gl.getProgramParameter(saturnshaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        uranusfragmentShader = getShader(gl, "uranus-fs");
+        uranusvertexShader = getShader(gl, "shader-vs");
+
+        uranusshaderProgram = gl.createProgram();
+        gl.attachShader(uranusshaderProgram, uranusvertexShader);
+        gl.attachShader(uranusshaderProgram, uranusfragmentShader);
+        gl.linkProgram(uranusshaderProgram);
+
+        uranusshaderProgram.vertexPositionAttribute = gl.getAttribLocation(uranusshaderProgram, "aVertexPosition");
+
+        uranusshaderProgram.pMatrixUniform = gl.getUniformLocation(uranusshaderProgram, "uPMatrix");
+        uranusshaderProgram.mvMatrixUniform = gl.getUniformLocation(uranusshaderProgram, "uMVMatrix");
+
+        if (!gl.getProgramParameter(uranusshaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        neptunefragmentShader = getShader(gl, "neptune-fs");
+        neptunevertexShader = getShader(gl, "shader-vs");
+
+        neptuneshaderProgram = gl.createProgram();
+        gl.attachShader(neptuneshaderProgram, neptunevertexShader);
+        gl.attachShader(neptuneshaderProgram, neptunefragmentShader);
+        gl.linkProgram(neptuneshaderProgram);
+
+        neptuneshaderProgram.vertexPositionAttribute = gl.getAttribLocation(neptuneshaderProgram, "aVertexPosition");
+
+        neptuneshaderProgram.pMatrixUniform = gl.getUniformLocation(neptuneshaderProgram, "uPMatrix");
+        neptuneshaderProgram.mvMatrixUniform = gl.getUniformLocation(neptuneshaderProgram, "uMVMatrix");
+
+        if (!gl.getProgramParameter(neptuneshaderProgram, gl.LINK_STATUS)) {
             alert("Could not initialise shaders");
         }
 
@@ -138,27 +394,61 @@
 
     function initBuffers() {
         //generate here
-        planets.forEach(function(i) {
-            i.generate(/*radius: */ 5);
-        });
+        planets[0].generate(218); //sun
+        planets[1].generate(0.6); //mercury 0.6
+        planets[2].generate(1.8); //venus 1.8
+        planets[3].generate(2); //earth 2
+        planets[4].generate(1); //mars 1
+        planets[5].generate(22); //jupiter 22
+        planets[6].generate(18); //saturn 18
+        planets[7].generate(8); //uranus 8
+        planets[8].generate(8); //neptune 8
     }
 
 
     var time = 0;
+    var zoom = -2000;
+    var rotation = 1.57;
+    var clock_increment = 0.03;
     function drawScene() {
-        time += 0.03;
+        time += clock_increment;
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         mat4.identity(mvMatrix);
-        mat4.translate(mvMatrix, [0, -10, -100]);
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 1000.0, pMatrix);
+        mat4.translate(mvMatrix, [0, -10, zoom]);
+        mat4.rotate(mvMatrix, rotation, [1,0,0]);
+        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 5000.0, pMatrix);
 
         //draw here
-        planets.forEach(function(i){
-            i.orbit(time);
-            i.draw(pMatrix, mvMatrix);
-        });
+        planets[0].orbit(time);
+        planets[0].draw(pMatrix, mvMatrix, sunshaderProgram);
+
+        
+        planets[1].orbit(time);
+        planets[1].draw(pMatrix, mvMatrix, mercuryshaderProgram);
+
+        planets[2].orbit(time);
+        planets[2].draw(pMatrix, mvMatrix, venusshaderProgram);
+
+        planets[3].orbit(time);
+        planets[3].draw(pMatrix, mvMatrix, earthshaderProgram);
+
+        planets[4].orbit(time);
+        planets[4].draw(pMatrix, mvMatrix, marsshaderProgram);
+
+        planets[5].orbit(time);
+        planets[5].draw(pMatrix, mvMatrix, jupitershaderProgram);
+
+        planets[6].orbit(time);
+        planets[6].draw(pMatrix, mvMatrix, saturnshaderProgram);
+
+        planets[7].orbit(time);
+        planets[7].draw(pMatrix, mvMatrix, uranusshaderProgram);
+
+        planets[8].orbit(time);
+        planets[8].draw(pMatrix, mvMatrix, neptuneshaderProgram);
+
     }
 
     function start() {
