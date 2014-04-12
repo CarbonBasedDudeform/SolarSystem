@@ -7,22 +7,22 @@ I would like to add realistic physics to the simulation.
 Current Status
 ==============
 
-Renders a sphere by tessellating a diamond to a defined depth.
+Renders the sun with the planets orbiting around it. The planets are roughly to scale in terms of size, orbits and distance from each other. Each planet is coloured a general colour using shaders at the moment that reflects its overall colour (eg. blue for earth, red-brown for mars).
 
 Controls
 ==============
 
-The keyboard can currently be used to move the "planet" that is rendered.
+The keyboard can currently be used to move the camera around focused on the sun at the centre.
 
-'W' - Move Up
+'W' - Zoom In
 
-'A' - Move Left
+'A' - Zoom Out
 
-'S' - Move Down
+'S' - Speed up Time
 
-'D' - Move Right
+'D' - Slow down Time
 
 
-'Q' - Rotate Anticlockwise
+'P' - Rotate solar system clockwise along X-axis
 
-'E' - Rotate Clockwise
+';' - Rotate solar system anticlockwise along X-axis
