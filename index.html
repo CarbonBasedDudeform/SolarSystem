@@ -223,21 +223,20 @@
         return shader;
     }
 
-    //var shaderProgram;
     function initShaders() {
-        sunshaderProgram = SetupShader("sun-fs", "shader-vs");
-        mercuryshaderProgram = SetupShader("mercury-fs", "shader-vs");
-        venusshaderProgram = SetupShader("venus-fs", "shader-vs");
-        earthshaderProgram = SetupShader("earth-fs", "shader-vs");
-        marsshaderProgram = SetupShader("mars-fs", "shader-vs");
-        jupitershaderProgram = SetupShader("jupiter-fs", "shader-vs");
-        saturnshaderProgram = SetupShader("saturn-fs", "shader-vs");
-        uranusshaderProgram = SetupShader("uranus-fs", "shader-vs");
-        neptuneshaderProgram = SetupShader("neptune-fs", "shader-vs");
-        skyboxshaderProgram = SetupShaderWithTex("skybox-fs", "tex-shader-vs");
+        sunshaderProgram = SetupShader("sun-fs", "shader-vs", false);
+        mercuryshaderProgram = SetupShader("mercury-fs", "shader-vs", false);
+        venusshaderProgram = SetupShader("venus-fs", "shader-vs", false);
+        earthshaderProgram = SetupShader("earth-fs", "shader-vs", false);
+        marsshaderProgram = SetupShader("mars-fs", "shader-vs", false);
+        jupitershaderProgram = SetupShader("jupiter-fs", "shader-vs", false);
+        saturnshaderProgram = SetupShader("saturn-fs", "shader-vs", false);
+        uranusshaderProgram = SetupShader("uranus-fs", "shader-vs", false);
+        neptuneshaderProgram = SetupShader("neptune-fs", "shader-vs", false);
+        skyboxshaderProgram = SetupShader("skybox-fs", "tex-shader-vs", true);
     }
 
-    function SetupShaderWithTex(fs_shader_name, vs_shader_name)
+    function SetupShader(fs_shader_name, vs_shader_name, UsesTexture)
     {
       var fragmentShader = getShader(gl, fs_shader_name);
       var vertexShader = getShader(gl, vs_shader_name);
@@ -248,33 +247,14 @@
       gl.linkProgram(shaderProgram);
 
       shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-      shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "texCoord");
 
       shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
       shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-      shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "sampler");
 
-      if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-          alert("Could not initialise shaders");
-      } else {
-        return shaderProgram;
+      if (UsesTexture) {
+        shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "texCoord");
+        shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "sampler");
       }
-    }
-
-    function SetupShader(fs_shader_name, vs_shader_name)
-    {
-      var fragmentShader = getShader(gl, fs_shader_name);
-      var vertexShader = getShader(gl, vs_shader_name);
-
-      var shaderProgram = gl.createProgram();
-      gl.attachShader(shaderProgram, vertexShader);
-      gl.attachShader(shaderProgram, fragmentShader);
-      gl.linkProgram(shaderProgram);
-
-      shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-
-      shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-      shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
 
       if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
           alert("Could not initialise shaders from within");
@@ -290,15 +270,33 @@
     function initBuffers() {
         //generates the verts, tex and indices buffers
         skybox.generate();
+
         planets[0].generate(218); //sun
+        planets[0].shaderProgram = sunshaderProgram;
+
         planets[1].generate(0.6); //mercury 0.6
+        planets[1].shaderProgram = mercuryshaderProgram;
+
         planets[2].generate(1.8); //venus 1.8
+        planets[2].shaderProgram = venusshaderProgram;
+
         planets[3].generate(2); //earth 2
+        planets[3].shaderProgram = earthshaderProgram;
+
         planets[4].generate(1); //mars 1
+        planets[4].shaderProgram = marsshaderProgram;
+
         planets[5].generate(22); //jupiter 22
+        planets[5].shaderProgram = jupitershaderProgram;
+
         planets[6].generate(18); //saturn 18
+        planets[6].shaderProgram = saturnshaderProgram;
+
         planets[7].generate(8); //uranus 8
+        planets[7].shaderProgram = uranusshaderProgram;
+
         planets[8].generate(8); //neptune 8
+        planets[8].shaderProgram = neptuneshaderProgram;
     }
 
 
@@ -319,33 +317,10 @@
         //draw here
         skybox.render(pMatrix, mvMatrix, skyboxshaderProgram);
 
-        planets[0].orbit(time);
-        planets[0].draw(pMatrix, mvMatrix, sunshaderProgram);
-
-
-        planets[1].orbit(time);
-        planets[1].draw(pMatrix, mvMatrix, mercuryshaderProgram);
-
-        planets[2].orbit(time);
-        planets[2].draw(pMatrix, mvMatrix, venusshaderProgram);
-
-        planets[3].orbit(time);
-        planets[3].draw(pMatrix, mvMatrix, earthshaderProgram);
-
-        planets[4].orbit(time);
-        planets[4].draw(pMatrix, mvMatrix, marsshaderProgram);
-
-        planets[5].orbit(time);
-        planets[5].draw(pMatrix, mvMatrix, jupitershaderProgram);
-
-        planets[6].orbit(time);
-        planets[6].draw(pMatrix, mvMatrix, saturnshaderProgram);
-
-        planets[7].orbit(time);
-        planets[7].draw(pMatrix, mvMatrix, uranusshaderProgram);
-
-        planets[8].orbit(time);
-        planets[8].draw(pMatrix, mvMatrix, neptuneshaderProgram);
+        planets.forEach(function(curPlanet) {
+          curPlanet.orbit(time);
+          curPlanet.draw(pMatrix, mvMatrix, curPlanet.shaderProgram);
+        });
     }
 
     function start() {

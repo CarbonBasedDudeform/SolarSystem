@@ -224,6 +224,8 @@ function Planet( x,y,z, oX, oZ) {
     	return this.worldZ;
     }
 
+		this.shaderProgram;
+
     this.draw = function (pMatrix, mvMatrix, shader) {
     	gl.useProgram(shader);
         gl.enableVertexAttribArray(shader.vertexPositionAttribute);
