@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html style="margin: 0; padding: 0;">
     <head>
         <title>The Solar System</title>
@@ -23,6 +24,7 @@
         <script type="text/javascript" src="scripts/glMatrix-0.9.5.min.js"></script>
         <script type="text/javascript" src="scripts/Planet.js"></script>
         <script type="text/javascript" src="scripts/Controller.js"></script>
+        <script src="scripts/Skybox.js"></script>
 
         <script id="shader-fs" type="x-shader/x-fragment">
             precision mediump float;
@@ -104,6 +106,18 @@
             }
         </script>
 
+        <script id="skybox-fs" type="x-shader/x-fragment">
+            precision mediump float;
+
+            varying vec2 vTexCoord;
+
+            uniform sampler2D sampler;
+
+            void main(void) {
+                gl_FragColor = texture2D(sampler, vec2(vTexCoord.s, vTexCoord.t));
+            }
+        </script>
+
         <script id="shader-vs" type="x-shader/x-vertex">
             attribute vec3 aVertexPosition;
 
@@ -115,9 +129,25 @@
             }
         </script>
 
+        <script id="tex-shader-vs" type="x-shader/x-vertex">
+            attribute vec3 aVertexPosition;
+            attribute vec2 texCoord;
+
+            uniform mat4 uMVMatrix;
+            uniform mat4 uPMatrix;
+
+            varying vec2 vTexCoord;
+
+            void main(void) {
+                gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+                vTexCoord = texCoord;
+            }
+        </script>
+
 
         <script type="text/javascript">
 
+    var skybox;
             //2 = 0.1AU
     var planets = new Array();
     planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*sun*/
@@ -377,13 +407,29 @@
             alert("Could not initialise shaders");
         }
 
-        gl.useProgram(shaderProgram);
+        //this segment of code can be used to refactor into nicer, cleaner code
+        //SEGMENT START
 
-        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+        skyboxfragmentShader = getShader(gl, "skybox-fs");
+        skyboxvertexShader = getShader(gl, "tex-shader-vs");
 
-        shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-        shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+        skyboxshaderProgram = gl.createProgram();
+        gl.attachShader(skyboxshaderProgram, skyboxvertexShader);
+        gl.attachShader(skyboxshaderProgram, skyboxfragmentShader);
+        gl.linkProgram(skyboxshaderProgram);
+
+        skyboxshaderProgram.vertexPositionAttribute = gl.getAttribLocation(skyboxshaderProgram, "aVertexPosition");
+        skyboxshaderProgram.textureCoordAttribute = gl.getAttribLocation(skyboxshaderProgram, "texCoord");
+
+        skyboxshaderProgram.pMatrixUniform = gl.getUniformLocation(skyboxshaderProgram, "uPMatrix");
+        skyboxshaderProgram.mvMatrixUniform = gl.getUniformLocation(skyboxshaderProgram, "uMVMatrix");
+        skyboxshaderProgram.samplerUniform = gl.getUniformLocation(skyboxshaderProgram, "sampler");
+
+        if (!gl.getProgramParameter(skyboxshaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        //SEGMENT END
     }
 
 
@@ -398,6 +444,7 @@
 
 
     function initBuffers() {
+        skybox.generate();
         //generate here
         planets[0].generate(218); //sun
         planets[1].generate(0.6); //mercury 0.6
@@ -426,6 +473,8 @@
         mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 5000.0, pMatrix);
 
         //draw here
+        skybox.render(pMatrix, mvMatrix, skyboxshaderProgram);
+
         planets[0].orbit(time);
         planets[0].draw(pMatrix, mvMatrix, sunshaderProgram);
 
@@ -453,14 +502,18 @@
 
         planets[8].orbit(time);
         planets[8].draw(pMatrix, mvMatrix, neptuneshaderProgram);
-
     }
 
     function start() {
         var canvas = document.getElementById("canvas");
         initGL(canvas);
         initShaders();
+
+        skybox = new Skybox();
+        skybox.Init();
+
         initBuffers();
+
 
 	    var controller = new Controller();
 
