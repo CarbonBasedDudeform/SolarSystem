@@ -268,6 +268,8 @@
     var pMatrix = mat4.create();
 
     function initBuffers() {
+        skybox = new Skybox();
+        skybox.Init();
         //generates the verts, tex and indices buffers
         skybox.generate();
         skybox.shaderProgram = skyboxshaderProgram;
@@ -328,14 +330,9 @@
         var canvas = document.getElementById("canvas");
         initGL(canvas);
         initShaders();
-
-        skybox = new Skybox();
-        skybox.Init();
-
         initBuffers();
 
-
-	    var controller = new Controller();
+	      var controller = new Controller();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
