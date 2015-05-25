@@ -7,21 +7,26 @@
                 width: 100%;
 				overflow: hidden;
             }
-            
+
             canvas {
                 width: 100%;
                 height: 100%;
             }
+
+            audio {
+              width: 100%;
+              background-color: #000;
+            }
         </style>
-				
+
 		<script type="text/javascript" src="scripts/jquery-2.0.3.min.js"></script>
         <script type="text/javascript" src="scripts/glMatrix-0.9.5.min.js"></script>
         <script type="text/javascript" src="scripts/Planet.js"></script>
         <script type="text/javascript" src="scripts/Controller.js"></script>
-        
+
         <script id="shader-fs" type="x-shader/x-fragment">
             precision mediump float;
-			
+
             void main(void) {
                 gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
             }
@@ -29,7 +34,7 @@
 
         <script id="sun-fs" type="x-shader/x-fragment">
             precision mediump float;
-            
+
             void main(void) {
                 gl_FragColor = vec4(1.0 , 0.9, 0.7, 1.0);
             }
@@ -37,7 +42,7 @@
 
         <script id="mercury-fs" type="x-shader/x-fragment">
             precision mediump float;
-            
+
             void main(void) {
                 gl_FragColor = vec4(0.4, 0.3, 0.2, 1.0);
             }
@@ -45,7 +50,7 @@
 
         <script id="venus-fs" type="x-shader/x-fragment">
             precision mediump float;
-            
+
             void main(void) {
                 gl_FragColor = vec4(0.4, 0.3, 0.2, 1.0);
             }
@@ -53,7 +58,7 @@
 
         <script id="earth-fs" type="x-shader/x-fragment">
             precision mediump float;
-            
+
             void main(void) {
                 gl_FragColor = vec4(0.1, 0.2, 0.4, 1.0);
             }
@@ -61,7 +66,7 @@
 
         <script id="mars-fs" type="x-shader/x-fragment">
             precision mediump float;
-            
+
             void main(void) {
                 gl_FragColor = vec4(0.9, 0.4, 0.2, 1.0);
             }
@@ -69,7 +74,7 @@
 
         <script id="jupiter-fs" type="x-shader/x-fragment">
             precision mediump float;
-            
+
             void main(void) {
                 gl_FragColor = vec4(0.7, 0.6, 0.4, 1.0);
             }
@@ -77,7 +82,7 @@
 
         <script id="saturn-fs" type="x-shader/x-fragment">
             precision mediump float;
-            
+
             void main(void) {
                 gl_FragColor = vec4(0.9, 0.6, 0.4, 1.0);
             }
@@ -85,7 +90,7 @@
 
         <script id="uranus-fs" type="x-shader/x-fragment">
             precision mediump float;
-            
+
             void main(void) {
                 gl_FragColor = vec4(0.5, 0.7, 0.8, 1.0);
             }
@@ -93,7 +98,7 @@
 
         <script id="neptune-fs" type="x-shader/x-fragment">
             precision mediump float;
-            
+
             void main(void) {
                 gl_FragColor = vec4(0.2, 0.4, 0.6, 1.0);
             }
@@ -286,7 +291,7 @@
         }
 
         //TODO: Refactor all these repetative lines of code: function along the lines of function(shaderProgramName, FragmentShaderID) should work
-        
+
         marsfragmentShader = getShader(gl, "mars-fs");
         marsvertexShader = getShader(gl, "shader-vs");
 
@@ -424,7 +429,7 @@
         planets[0].orbit(time);
         planets[0].draw(pMatrix, mvMatrix, sunshaderProgram);
 
-        
+
         planets[1].orbit(time);
         planets[1].draw(pMatrix, mvMatrix, mercuryshaderProgram);
 
@@ -456,9 +461,9 @@
         initGL(canvas);
         initShaders();
         initBuffers();
-		
+
 	    var controller = new Controller();
-		
+
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
 
@@ -467,6 +472,7 @@
 </script>
     </head>
     <body onLoad="start();" style="margin: 0; padding: 0;">
+        <audio src="./audio/music.mp3" autoplay="true" loop="true" controls="controls"></audio>
         <canvas id="canvas"  width="800" height="600"></canvas>
     </body>
 </html>
