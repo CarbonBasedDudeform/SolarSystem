@@ -270,6 +270,7 @@
     function initBuffers() {
         //generates the verts, tex and indices buffers
         skybox.generate();
+        skybox.shaderProgram = skyboxshaderProgram;
 
         planets[0].generate(218); //sun
         planets[0].shaderProgram = sunshaderProgram;
@@ -315,11 +316,11 @@
         mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 5000.0, pMatrix);
 
         //draw here
-        skybox.render(pMatrix, mvMatrix, skyboxshaderProgram);
+        skybox.render(pMatrix, mvMatrix);
 
         planets.forEach(function(curPlanet) {
           curPlanet.orbit(time);
-          curPlanet.draw(pMatrix, mvMatrix, curPlanet.shaderProgram);
+          curPlanet.draw(pMatrix, mvMatrix);
         });
     }
 

@@ -226,18 +226,18 @@ function Planet( x,y,z, oX, oZ) {
 
 		this.shaderProgram;
 
-    this.draw = function (pMatrix, mvMatrix, shader) {
-    	gl.useProgram(shader);
-        gl.enableVertexAttribArray(shader.vertexPositionAttribute);
+    this.draw = function (pMatrix, mvMatrix) {
+    	gl.useProgram(this.shaderProgram);
+        gl.enableVertexAttribArray(this.shaderProgram.vertexPositionAttribute);
        	mat4.translate(mvMatrix, [this.worldX, this.worldY, this.worldZ]);
        	gl.bindBuffer(gl.ARRAY_BUFFER, _buffer);
-       	gl.vertexAttribPointer(shader.vertexPositionAttribute, _buffer.itemSize, gl.FLOAT, false, 0, 0);
-       	gl.uniformMatrix4fv(shader.pMatrixUniform, false, pMatrix);
-       	gl.uniformMatrix4fv(shader.mvMatrixUniform, false, mvMatrix);
+       	gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, _buffer.itemSize, gl.FLOAT, false, 0, 0);
+       	gl.uniformMatrix4fv(this.shaderProgram.pMatrixUniform, false, pMatrix);
+       	gl.uniformMatrix4fv(this.shaderProgram.mvMatrixUniform, false, mvMatrix);
        	gl.drawArrays(gl.TRIANGLES, 0, _buffer.numItems);
        	mat4.translate(mvMatrix, [-this.worldX, -this.worldY, -this.worldZ]);
 
-				gl.disableVertexAttribArray(shader.vertexPositionAttribute);
+				gl.disableVertexAttribArray(this.shaderProgram.vertexPositionAttribute);
 				gl.bindBuffer(gl.ARRAY_BUFFER, null);
    	}
 }

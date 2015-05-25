@@ -144,31 +144,33 @@ function Skybox()
     this.indexBuffer.numItems = 36;
   }
 
-  this.render=  function(pMatrix, mvMatrix, shader) {
-    gl.useProgram(shader);
-    gl.enableVertexAttribArray(shader.vertexPositionAttribute);
-    gl.enableVertexAttribArray(shader.textureCoordAttribute);
+  this.shaderProgram;
+
+  this.render=  function(pMatrix, mvMatrix) {
+    gl.useProgram(this.shaderProgram);
+    gl.enableVertexAttribArray(this.shaderProgram.vertexPositionAttribute);
+    gl.enableVertexAttribArray(this.shaderProgram.textureCoordAttribute);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertsBuffer);
-    gl.vertexAttribPointer(shader.vertexPositionAttribute, this.vertsBuffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, this.vertsBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-    gl.vertexAttribPointer(shader.textureCoordAttribute, this.buffer.itemSize, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(this.shaderProgram.textureCoordAttribute, this.buffer.itemSize, gl.FLOAT, false, 0, 0);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, this.Texture);
-    gl.uniform1i(shader.samplerUniform, 0);
+    gl.uniform1i(this.shaderProgram.samplerUniform, 0);
 
     //switch to index buffer
-    gl.uniformMatrix4fv(shader.pMatrixUniform, false, pMatrix);
-    gl.uniformMatrix4fv(shader.mvMatrixUniform, false, mvMatrix);
+    gl.uniformMatrix4fv(this.shaderProgram.pMatrixUniform, false, pMatrix);
+    gl.uniformMatrix4fv(this.shaderProgram.mvMatrixUniform, false, mvMatrix);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     gl.drawElements(gl.TRIANGLES, this.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 
     //clean up
-    gl.disableVertexAttribArray(shader.vertexPositionAttribute);
-    gl.disableVertexAttribArray(shader.textureCoordAttribute);
+    gl.disableVertexAttribArray(this.shaderProgram.vertexPositionAttribute);
+    gl.disableVertexAttribArray(this.shaderProgram.textureCoordAttribute);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
   }
