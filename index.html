@@ -223,236 +223,73 @@
         return shader;
     }
 
-    var shaderProgram;
-
-    function setupShader(shdaerProgramName, FragmentShaderIDName) //currently uses the same vertex shader for all, would need to be updated if this changes
-    {
-        var fragmentShader = getShader(gl, FragmentShaderIDName);
-        var vertexShader = getShader(gl, "shader-vs");
-
-        shaderProgramName = gl.createProgram();
-        gl.attachShader(shaderProgramName, vertexShader);
-        gl.attachShader(shaderProgramName, fragmentShader);
-        gl.linkProgram(shaderProgramName);
-
-        shaderProgramName.vertexPositionAttribute = gl.getAttribLocation(shaderProgramName, "aVertexPosition");
-
-        shaderProgramName.pMatrixUniform = gl.getUniformLocation(shaderProgramName, "uPMatrix");
-        shaderProgramName.mvMatrixUniform = gl.getUniformLocation(shaderProgramName, "uMVMatrix");
-
-        if (!gl.getProgramParameter(shaderProgramName, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
+    //var shaderProgram;
+    function initShaders() {
+        sunshaderProgram = SetupShader("sun-fs", "shader-vs");
+        mercuryshaderProgram = SetupShader("mercury-fs", "shader-vs");
+        venusshaderProgram = SetupShader("venus-fs", "shader-vs");
+        earthshaderProgram = SetupShader("earth-fs", "shader-vs");
+        marsshaderProgram = SetupShader("mars-fs", "shader-vs");
+        jupitershaderProgram = SetupShader("jupiter-fs", "shader-vs");
+        saturnshaderProgram = SetupShader("saturn-fs", "shader-vs");
+        uranusshaderProgram = SetupShader("uranus-fs", "shader-vs");
+        neptuneshaderProgram = SetupShader("neptune-fs", "shader-vs");
+        skyboxshaderProgram = SetupShaderWithTex("skybox-fs", "tex-shader-vs");
     }
 
-    function initShaders() {
-        var fragmentShader = getShader(gl, "shader-fs");
-        var vertexShader = getShader(gl, "shader-vs");
+    function SetupShaderWithTex(fs_shader_name, vs_shader_name)
+    {
+      var fragmentShader = getShader(gl, fs_shader_name);
+      var vertexShader = getShader(gl, vs_shader_name);
 
-        shaderProgram = gl.createProgram();
-        gl.attachShader(shaderProgram, vertexShader);
-        gl.attachShader(shaderProgram, fragmentShader);
-        gl.linkProgram(shaderProgram);
+      var shaderProgram = gl.createProgram();
+      gl.attachShader(shaderProgram, vertexShader);
+      gl.attachShader(shaderProgram, fragmentShader);
+      gl.linkProgram(shaderProgram);
 
-        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-        sunfragmentShader = getShader(gl, "sun-fs");
-        sunvertexShader = getShader(gl, "shader-vs");
+      shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+      shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "texCoord");
 
-        sunshaderProgram = gl.createProgram();
-        gl.attachShader(sunshaderProgram, sunvertexShader);
-        gl.attachShader(sunshaderProgram, sunfragmentShader);
-        gl.linkProgram(sunshaderProgram);
+      shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+      shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+      shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "sampler");
 
-        sunshaderProgram.vertexPositionAttribute = gl.getAttribLocation(sunshaderProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(sunshaderProgram.vertexPositionAttribute);
+      if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+          alert("Could not initialise shaders");
+      } else {
+        return shaderProgram;
+      }
+    }
 
-        sunshaderProgram.pMatrixUniform = gl.getUniformLocation(sunshaderProgram, "uPMatrix");
-        sunshaderProgram.mvMatrixUniform = gl.getUniformLocation(sunshaderProgram, "uMVMatrix");
+    function SetupShader(fs_shader_name, vs_shader_name)
+    {
+      var fragmentShader = getShader(gl, fs_shader_name);
+      var vertexShader = getShader(gl, vs_shader_name);
 
-        if (!gl.getProgramParameter(sunshaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
+      var shaderProgram = gl.createProgram();
+      gl.attachShader(shaderProgram, vertexShader);
+      gl.attachShader(shaderProgram, fragmentShader);
+      gl.linkProgram(shaderProgram);
 
-        mercuryfragmentShader = getShader(gl, "mercury-fs");
-        mercuryvertexShader = getShader(gl, "shader-vs");
+      shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 
-        mercuryshaderProgram = gl.createProgram();
-        gl.attachShader(mercuryshaderProgram, mercuryvertexShader);
-        gl.attachShader(mercuryshaderProgram, mercuryfragmentShader);
-        gl.linkProgram(mercuryshaderProgram);
+      shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+      shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
 
-        mercuryshaderProgram.vertexPositionAttribute = gl.getAttribLocation(mercuryshaderProgram, "aVertexPosition");
-
-        mercuryshaderProgram.pMatrixUniform = gl.getUniformLocation(mercuryshaderProgram, "uPMatrix");
-        mercuryshaderProgram.mvMatrixUniform = gl.getUniformLocation(mercuryshaderProgram, "uMVMatrix");
-
-        if (!gl.getProgramParameter(mercuryshaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        venusfragmentShader = getShader(gl, "venus-fs");
-        venusvertexShader = getShader(gl, "shader-vs");
-
-        venusshaderProgram = gl.createProgram();
-        gl.attachShader(venusshaderProgram, venusvertexShader);
-        gl.attachShader(venusshaderProgram, venusfragmentShader);
-        gl.linkProgram(venusshaderProgram);
-
-        venusshaderProgram.vertexPositionAttribute = gl.getAttribLocation(venusshaderProgram, "aVertexPosition");
-
-        venusshaderProgram.pMatrixUniform = gl.getUniformLocation(venusshaderProgram, "uPMatrix");
-        venusshaderProgram.mvMatrixUniform = gl.getUniformLocation(venusshaderProgram, "uMVMatrix");
-
-        if (!gl.getProgramParameter(venusshaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-
-        earthfragmentShader = getShader(gl, "earth-fs");
-        earthvertexShader = getShader(gl, "shader-vs");
-
-        earthshaderProgram = gl.createProgram();
-        gl.attachShader(earthshaderProgram, earthvertexShader);
-        gl.attachShader(earthshaderProgram, earthfragmentShader);
-        gl.linkProgram(earthshaderProgram);
-
-        earthshaderProgram.vertexPositionAttribute = gl.getAttribLocation(earthshaderProgram, "aVertexPosition");
-
-        earthshaderProgram.pMatrixUniform = gl.getUniformLocation(earthshaderProgram, "uPMatrix");
-        earthshaderProgram.mvMatrixUniform = gl.getUniformLocation(earthshaderProgram, "uMVMatrix");
-
-        if (!gl.getProgramParameter(earthshaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        //TODO: Refactor all these repetative lines of code: function along the lines of function(shaderProgramName, FragmentShaderID) should work
-
-        marsfragmentShader = getShader(gl, "mars-fs");
-        marsvertexShader = getShader(gl, "shader-vs");
-
-        marsshaderProgram = gl.createProgram();
-        gl.attachShader(marsshaderProgram, marsvertexShader);
-        gl.attachShader(marsshaderProgram, marsfragmentShader);
-        gl.linkProgram(marsshaderProgram);
-
-        marsshaderProgram.vertexPositionAttribute = gl.getAttribLocation(marsshaderProgram, "aVertexPosition");
-
-        marsshaderProgram.pMatrixUniform = gl.getUniformLocation(marsshaderProgram, "uPMatrix");
-        marsshaderProgram.mvMatrixUniform = gl.getUniformLocation(marsshaderProgram, "uMVMatrix");
-
-        if (!gl.getProgramParameter(marsshaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        jupiterfragmentShader = getShader(gl, "jupiter-fs");
-        jupitervertexShader = getShader(gl, "shader-vs");
-
-        jupitershaderProgram = gl.createProgram();
-        gl.attachShader(jupitershaderProgram, jupitervertexShader);
-        gl.attachShader(jupitershaderProgram, jupiterfragmentShader);
-        gl.linkProgram(jupitershaderProgram);
-
-        jupitershaderProgram.vertexPositionAttribute = gl.getAttribLocation(jupitershaderProgram, "aVertexPosition");
-
-        jupitershaderProgram.pMatrixUniform = gl.getUniformLocation(jupitershaderProgram, "uPMatrix");
-        jupitershaderProgram.mvMatrixUniform = gl.getUniformLocation(jupitershaderProgram, "uMVMatrix");
-
-        if (!gl.getProgramParameter(jupitershaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        saturnfragmentShader = getShader(gl, "saturn-fs");
-        saturnvertexShader = getShader(gl, "shader-vs");
-
-        saturnshaderProgram = gl.createProgram();
-        gl.attachShader(saturnshaderProgram, saturnvertexShader);
-        gl.attachShader(saturnshaderProgram, saturnfragmentShader);
-        gl.linkProgram(saturnshaderProgram);
-
-        saturnshaderProgram.vertexPositionAttribute = gl.getAttribLocation(saturnshaderProgram, "aVertexPosition");
-
-        saturnshaderProgram.pMatrixUniform = gl.getUniformLocation(saturnshaderProgram, "uPMatrix");
-        saturnshaderProgram.mvMatrixUniform = gl.getUniformLocation(saturnshaderProgram, "uMVMatrix");
-
-        if (!gl.getProgramParameter(saturnshaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        uranusfragmentShader = getShader(gl, "uranus-fs");
-        uranusvertexShader = getShader(gl, "shader-vs");
-
-        uranusshaderProgram = gl.createProgram();
-        gl.attachShader(uranusshaderProgram, uranusvertexShader);
-        gl.attachShader(uranusshaderProgram, uranusfragmentShader);
-        gl.linkProgram(uranusshaderProgram);
-
-        uranusshaderProgram.vertexPositionAttribute = gl.getAttribLocation(uranusshaderProgram, "aVertexPosition");
-
-        uranusshaderProgram.pMatrixUniform = gl.getUniformLocation(uranusshaderProgram, "uPMatrix");
-        uranusshaderProgram.mvMatrixUniform = gl.getUniformLocation(uranusshaderProgram, "uMVMatrix");
-
-        if (!gl.getProgramParameter(uranusshaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        neptunefragmentShader = getShader(gl, "neptune-fs");
-        neptunevertexShader = getShader(gl, "shader-vs");
-
-        neptuneshaderProgram = gl.createProgram();
-        gl.attachShader(neptuneshaderProgram, neptunevertexShader);
-        gl.attachShader(neptuneshaderProgram, neptunefragmentShader);
-        gl.linkProgram(neptuneshaderProgram);
-
-        neptuneshaderProgram.vertexPositionAttribute = gl.getAttribLocation(neptuneshaderProgram, "aVertexPosition");
-
-        neptuneshaderProgram.pMatrixUniform = gl.getUniformLocation(neptuneshaderProgram, "uPMatrix");
-        neptuneshaderProgram.mvMatrixUniform = gl.getUniformLocation(neptuneshaderProgram, "uMVMatrix");
-
-        if (!gl.getProgramParameter(neptuneshaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        //this segment of code can be used to refactor into nicer, cleaner code
-        //SEGMENT START
-
-        skyboxfragmentShader = getShader(gl, "skybox-fs");
-        skyboxvertexShader = getShader(gl, "tex-shader-vs");
-
-        skyboxshaderProgram = gl.createProgram();
-        gl.attachShader(skyboxshaderProgram, skyboxvertexShader);
-        gl.attachShader(skyboxshaderProgram, skyboxfragmentShader);
-        gl.linkProgram(skyboxshaderProgram);
-
-        skyboxshaderProgram.vertexPositionAttribute = gl.getAttribLocation(skyboxshaderProgram, "aVertexPosition");
-        skyboxshaderProgram.textureCoordAttribute = gl.getAttribLocation(skyboxshaderProgram, "texCoord");
-
-        skyboxshaderProgram.pMatrixUniform = gl.getUniformLocation(skyboxshaderProgram, "uPMatrix");
-        skyboxshaderProgram.mvMatrixUniform = gl.getUniformLocation(skyboxshaderProgram, "uMVMatrix");
-        skyboxshaderProgram.samplerUniform = gl.getUniformLocation(skyboxshaderProgram, "sampler");
-
-        if (!gl.getProgramParameter(skyboxshaderProgram, gl.LINK_STATUS)) {
-            alert("Could not initialise shaders");
-        }
-
-        //SEGMENT END
+      if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+          alert("Could not initialise shaders from within");
+      } else {
+        return shaderProgram;
+      }
     }
 
 
     var mvMatrix = mat4.create();
     var pMatrix = mat4.create();
 
-    function setMatrixUniforms() {
-        gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-        gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-    }
-
-
-
     function initBuffers() {
+        //generates the verts, tex and indices buffers
         skybox.generate();
-        //generate here
         planets[0].generate(218); //sun
         planets[1].generate(0.6); //mercury 0.6
         planets[2].generate(1.8); //venus 1.8
