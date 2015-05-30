@@ -35,11 +35,11 @@
         </script>
 
         <script id="sun-fs" type="x-shader/x-fragment">
-            precision mediump float;
+        precision mediump float;
 
-            void main(void) {
-                gl_FragColor = vec4(1.0 , 0.9, 0.7, 1.0);
-            }
+        void main(void) {
+            gl_FragColor = vec4(1.0 , 0.9, 0.7, 1.0);
+        }
         </script>
 
         <script id="mercury-fs" type="x-shader/x-fragment">
@@ -342,7 +342,7 @@
 </script>
     </head>
     <body onLoad="start();" style="margin: 0; padding: 0;">
-        <audio src="./audio/music.mp3" autoplay="true" loop="true" controls="controls"></audio>
+        <audio src="./audio/music.mp3" loop controls></audio>
         <canvas id="canvas"  width="800" height="600"></canvas>
     </body>
 </html>
