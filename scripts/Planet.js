@@ -19,7 +19,6 @@ function Planet( x,y,z, oX, oZ) {
    		//can overide this to give more specialised/eccentric orbits in the future
    		//but because there are no complex orbits in the solar system just gonna fake it and move everything around in a circle
    		this.worldX = ( ( Math.sin(t * this._speed ) * this._orbitX ));
-   		//alert(this._orbitX);
    		this.worldZ = ( ( Math.cos(t * this._speed ) * this._orbitZ ));
    	}
 
@@ -36,111 +35,66 @@ function Planet( x,y,z, oX, oZ) {
 
 		var patchSize = 9;
 		var newVerts = new Array();
+		var that = this;
+
+		function RecalcCoord(coords, radius)
+		{
+				var result = [];
+				var dist = that.VectorLength(coords[0], coords[1], coords[2]);
+				if (dist <= radius) {
+					var normalizedX = that.Normalize(coords[0], dist);
+					var normalizedY = that.Normalize(coords[1], dist);
+					var normalizedZ = that.Normalize(coords[2], dist);
+					result.push(normalizedX * radius);
+					result.push(normalizedY * radius);
+					result.push(normalizedZ * radius);
+				} else {
+					result = coords;
+				}
+			return result;
+		}
+
+		function RecalcProcedure(x, y, z) {
+			var coords =	RecalcCoord([x, y, z], radius);
+			newVerts.push(coords[0]); //x
+			newVerts.push(coords[1]);
+			newVerts.push(coords[2]);
+		}
+
+		function RecalcProc(coord) { RecalcProcedure(coord[0], coord[1], coord[2]); }
+		function RecalcProcHalf(coord1, coord2) {
+			RecalcProcedure( (coord1[0] + coord2[0]) / 2,
+											 (coord1[1] + coord2[1]) / 2,
+											 (coord1[2] + coord2[2]) / 2);
+		}
 		for (var i = 0; i < verts.length; i += patchSize)
 		{
+
 				//bottom left triangle
-				var coords = this.RecalcCoord([verts[i+3], verts[i+4], verts[i+5]], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
+				var left = [verts[i+3], verts[i+4], verts[i+5]];
+				var top = [verts[i], verts[i+1], verts[i+2]];
+				var right = [verts[i+6], verts[i+7], verts[i+8]];
 
-				coords = this.RecalcCoord([(verts[i+3] + verts[i]) / 2,
-									 (verts[i+4] + verts[i+1]) / 2,
-									 ((verts[i+5] + verts[i+2]) / 2)], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
+			 	RecalcProc(left);
+				RecalcProcHalf(left, top);
+				RecalcProcHalf(left, right);
+				RecalcProcHalf(left, top);
 
-				coords = this.RecalcCoord([(verts[i+3] + verts[i+6]) / 2,
-									  (verts[i+4] + verts[i+7]) / 2,
-									 ((verts[i+5] + verts[i+8]) / 2)], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
+				RecalcProc(top);
+				RecalcProcHalf(top, right);
+				RecalcProcHalf(left, right);
+				RecalcProcHalf(top, right);
 
-				coords = this.RecalcCoord([(verts[i+3] + verts[i]) / 2,
-									  (verts[i+4] + verts[i+1]) / 2,
-									 ((verts[i+5] + verts[i+2]) / 2)], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
-
-				coords = this.RecalcCoord([verts[i],
-									 verts[i+1],
-									 verts[i+2]], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
-
-				coords = this.RecalcCoord([(verts[i] + verts[i+6]) / 2,
-									 (verts[i+1] + verts[i+7]) / 2,
-									 ((verts[i+2] + verts[i+8]) / 2)], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
-
-				coords = this.RecalcCoord([(verts[i+3] + verts[i+6]) / 2,
-									  (verts[i+4] + verts[i+7]) / 2,
-									  (verts[i+5] + verts[i+8]) / 2], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
-
-				coords = this.RecalcCoord([(verts[i] + verts[i+6]) / 2,
-									  (verts[i+1] + verts[i+7]) / 2 ,
-									  (verts[i+2] + verts[i+8]) /2], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
-
-				coords = this.RecalcCoord([verts[i+6],
-									  verts[i+7],
-									  verts[i+8]], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
-
-				coords = this.RecalcCoord([(verts[i+3] + verts[i]) / 2,
-									  (verts[i+4] + verts[i+1]) / 2,
-									  (verts[i+5] + verts[i+2]) / 2], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
-
-				coords = this.RecalcCoord([(verts[i] + verts[i+6]) / 2,
-									  (verts[i+1] + verts[i+7]) / 2,
-									  (verts[i+2] + verts[i+8]) / 2], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
-
-				coords = this.RecalcCoord([(verts[i+3] + verts[i+6]) / 2,
-									  (verts[i+4] + verts[i+7]) / 2,
-									  (verts[i+5] + verts[i+8]) / 2], radius);
-				newVerts.push(coords[0]); //x
-				newVerts.push(coords[1]);
-				newVerts.push(coords[2]);
+				RecalcProc(right);
+				RecalcProcHalf(left, top);
+				RecalcProcHalf(top, right);
+				RecalcProcHalf(left, right);
 		}
+
 		return newVerts;
 
     }
 
-    	this.RecalcCoord = function(coords, radius)
-    	{
-			var result = [];
-			var dist = this.VectorLength(coords[0], coords[1], coords[2]);
-			if (dist <= radius) {
-				var normalizedX = this.Normalize(coords[0], dist);
-				var normalizedY = this.Normalize(coords[1], dist);
-				var normalizedZ = this.Normalize(coords[2], dist);
-				result.push(normalizedX * radius);
-				result.push(normalizedY * radius);
-				result.push(normalizedZ * radius);
-			} else {
-				result = coords;
-			}
-			return result;
-    	}
 
 		this.VectorLength = function(vectorX, vectorY, vectorZ) {
 			return Math.sqrt( (vectorX*vectorX ) + (vectorY * vectorY) + (vectorZ * vectorZ) );

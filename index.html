@@ -154,26 +154,40 @@
 
         <script type="text/javascript">
 
+        function SetupPlanets() {
+          var sun = new Planet( /*location(x,z,y): */  0,  0, 0,
+                                /*orbit rotation (x,y)*/0,     0);
+          var mercury = new Planet( /*location(x,z,y): */ -8 -218 /*suns radius*/,  0, 0,
+                                    /*orbit rotation (x,y)*/225, 225);
+          var venus = new Planet( /*location(x,z,y): */ -14 -218 -22, 0, 0,
+                                  /*orbit rotation (x,y)*/240, 240);
+          var earth = new Planet( /*location(x,z,y): */ -20 -218 -22 -18, 0, 0,
+                                   /*orbit rotation (x,y)*/250, 250);
+          var mars = new Planet( /*location(x,z,y): */ -30 -218 -22 -18 -8, 0, 0,
+                                 /*orbit rotation (x,y)*/ 280, 280);
+          var jupiter = new Planet( /*location(x,z,y): */ -104 -218 -22 -18 -8 -8, 0, 0,
+                                    /*orbit rotation (x,y)*/350,     350);
+          var saturn = new Planet( /*location(x,z,y): */  -190 -218 -22 -18 -8 -8 -2,   0, 0,
+                                   /*orbit rotation (x,y)*/450,     450);
+          var uranus = new Planet( /*location(x,z,y): */  -384 -218 -22 -18 -8 -8 -2 -2,  0, 0,
+                                   /*orbit rotation (x,y)*/600,     600);
+          var neptune = new Planet( /*location(x,z,y): */  -600 -218 -22 -18 -8 -8 -2 -2 -1,  0, 0,
+                                    /*orbit rotation (x,y)*/800,     800);
+          mercury.setSpeed(3.33);
+          venus.setSpeed(1.4);
+          earth.setSpeed(1);
+          mars.setSpeed(0.55);
+          jupiter.setSpeed(0.083);
+          saturn.setSpeed(0.034);
+          uranus.setSpeed(0.0119);
+          neptune.setSpeed(0.00605);
+
+          return [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
+        }
+
     var skybox;
             //2 = 0.1AU
-    var planets = new Array();
-    planets.push(new Planet( /*location(x,z,y): */  0,  0, 0, /*orbit rotation (x,y)*/0,     0)); /*sun*/
-    planets.push(new Planet( /*location(x,z,y): */ -8 -218 /*suns radius*/,  0, 0, /*orbit rotation (x,y)*/225, 225)); /*mercury*/
-    planets.push(new Planet( /*location(x,z,y): */ -14 -218 -22, 0, 0, /*orbit rotation (x,y)*/240, 240)); /*venus*/
-    planets.push(new Planet( /*location(x,z,y): */ -20 -218 -22 -18, 0, 0, /*orbit rotation (x,y)*/250, 250)); /*earth*/
-    planets.push(new Planet( /*location(x,z,y): */ -30 -218 -22 -18 -8, 0, 0, /*orbit rotation (x,y)*/ 280, 280)); /*mars*/
-    planets.push(new Planet( /*location(x,z,y): */ -104 -218 -22 -18 -8 -8, 0, 0, /*orbit rotation (x,y)*/350,     350)); /*jupiter*/
-    planets.push(new Planet( /*location(x,z,y): */  -190 -218 -22 -18 -8 -8 -2,   0, 0, /*orbit rotation (x,y)*/450,     450)); /*saturn*/
-    planets.push(new Planet( /*location(x,z,y): */  -384 -218 -22 -18 -8 -8 -2 -2,  0, 0, /*orbit rotation (x,y)*/600,     600)); /*uranus*/
-    planets.push(new Planet( /*location(x,z,y): */  -600 -218 -22 -18 -8 -8 -2 -2 -1,  0, 0, /*orbit rotation (x,y)*/800,     800)); /*neptune*/
-    planets[1].setSpeed(3.33);
-    planets[2].setSpeed(1.4);
-    planets[3].setSpeed(1);
-    planets[4].setSpeed(0.55);
-    planets[5].setSpeed(0.083);
-    planets[6].setSpeed(0.034);
-    planets[7].setSpeed(0.0119);
-    planets[8].setSpeed(0.00605);
+    var planets = SetupPlanets();
 
         var gl;
         function initGL(canvas) {
