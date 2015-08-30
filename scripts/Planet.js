@@ -1,13 +1,14 @@
-function Planet( x,y,z, oX, oZ) {
-		this.worldX = x;
-    this.worldY = y;
-    this.worldZ = z;
+function Planet( settings) {
+	console.log(settings);
+		this.worldX = settings.position.x;
+    this.worldY = settings.position.y;
+    this.worldZ = settings.position.z;
+	console.log(this.worldX);
 
-
-   	this._orbitX = oX;
-   	this._orbitZ = oZ;
-		this._orbitY = 1;
-		this._speed = 1;
+   	this._orbitX = settings.orbit.x;
+   	this._orbitZ = settings.orbit.y;
+		this._orbitY = settings.orbit.z;
+		this._speed = settings.speed;
 
 	this.setSpeed = function(v)
 	{
