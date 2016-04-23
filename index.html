@@ -20,6 +20,13 @@
             width: 100%;
             background-color: #000;
         }
+
+        #controlsContainer {
+            position: absolute;
+            background-color: rgba(255,255,255, 0.75);
+            top: 50px;
+            padding: 10px;
+        }
     </style>
 
     <script type="text/javascript" src="scripts/jquery-2.0.3.min.js"></script>
@@ -362,13 +369,17 @@
             });
         }
 
+        var incTime;
+        var dectime;
+
         function start() {
             var canvas = document.getElementById("canvas");
             initGL(canvas);
             initShaders();
             initBuffers();
-
             var controller = new Controller();
+            incTime = controller.IncreaseTime;
+            decTime = controller.DecreaseTime;
 
             gl.clearColor(0.0, 0.0, 0.0, 1.0);
             gl.enable(gl.DEPTH_TEST);
@@ -381,6 +392,12 @@
 <body onLoad="start();" style="margin: 0; padding: 0;">
     <audio src="./audio/music.mp3" loop controls></audio>
     <canvas id="canvas" width="800" height="600"></canvas>
+    <div id="controlsContainer">
+        <label for="TimeControls">Time
+            <button name="IncreaseTime" onClick="incTime()">+</Button>
+            <button name="DecreaseTime" onClick="decTime()">-</Button>
+        </label>
+    </div>
 </body>
 
 </html>

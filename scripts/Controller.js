@@ -31,11 +31,11 @@ function Controller() {
         }
     });
 
-    var IncreaseTime = function() {
-        clock_increment += 0.01;
+    this.IncreaseTime = function() {
+				clock_increment += 0.01;
     }
 
-    var DecreaseTime = function() {
+    this.DecreaseTime = function() {
         clock_increment -= 0.01;
     }
 }
