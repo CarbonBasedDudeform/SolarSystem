@@ -1,185 +1,222 @@
 <!DOCTYPE html>
 <html style="margin: 0; padding: 0;">
-    <head>
-        <title>The Solar System</title>
-        <style>
-            html, body {
-                height: 100%;
-                width: 100%;
-				overflow: hidden;
-            }
 
-            canvas {
-                width: 100%;
-                height: 100%;
-            }
-
-            audio {
-              width: 100%;
-              background-color: #000;
-            }
-        </style>
-
-		<script type="text/javascript" src="scripts/jquery-2.0.3.min.js"></script>
-        <script type="text/javascript" src="scripts/glMatrix-0.9.5.min.js"></script>
-        <script type="text/javascript" src="scripts/Planet.js"></script>
-        <script type="text/javascript" src="scripts/Controller.js"></script>
-        <script src="scripts/Skybox.js"></script>
-
-        <script id="shader-fs" type="x-shader/x-fragment">
-            precision mediump float;
-
-            void main(void) {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-            }
-        </script>
-
-        <script id="sun-fs" type="x-shader/x-fragment">
-        precision mediump float;
-
-        void main(void) {
-            gl_FragColor = vec4(1.0 , 0.9, 0.7, 1.0);
+<head>
+    <title>The Solar System</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
         }
-        </script>
 
-        <script id="mercury-fs" type="x-shader/x-fragment">
-            precision mediump float;
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
 
-            void main(void) {
-                gl_FragColor = vec4(0.4, 0.3, 0.2, 1.0);
-            }
-        </script>
+        audio {
+            width: 100%;
+            background-color: #000;
+        }
+    </style>
 
-        <script id="venus-fs" type="x-shader/x-fragment">
-            precision mediump float;
+    <script type="text/javascript" src="scripts/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="scripts/glMatrix-0.9.5.min.js"></script>
+    <script type="text/javascript" src="scripts/Planet.js"></script>
+    <script type="text/javascript" src="scripts/Controller.js"></script>
+    <script src="scripts/Skybox.js"></script>
 
-            void main(void) {
-                gl_FragColor = vec4(0.4, 0.3, 0.2, 1.0);
-            }
-        </script>
+    <script id="shader-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); }
+    </script>
 
-        <script id="earth-fs" type="x-shader/x-fragment">
-            precision mediump float;
+    <script id="sun-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(1.0 , 0.9, 0.7, 1.0); }
+    </script>
 
-            void main(void) {
-                gl_FragColor = vec4(0.1, 0.2, 0.4, 1.0);
-            }
-        </script>
+    <script id="mercury-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(0.4, 0.3, 0.2, 1.0); }
+    </script>
 
-        <script id="mars-fs" type="x-shader/x-fragment">
-            precision mediump float;
+    <script id="venus-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(0.4, 0.3, 0.2, 1.0); }
+    </script>
 
-            void main(void) {
-                gl_FragColor = vec4(0.9, 0.4, 0.2, 1.0);
-            }
-        </script>
+    <script id="earth-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(0.1, 0.2, 0.4, 1.0); }
+    </script>
 
-        <script id="jupiter-fs" type="x-shader/x-fragment">
-            precision mediump float;
+    <script id="mars-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(0.9, 0.4, 0.2, 1.0); }
+    </script>
 
-            void main(void) {
-                gl_FragColor = vec4(0.7, 0.6, 0.4, 1.0);
-            }
-        </script>
+    <script id="jupiter-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(0.7, 0.6, 0.4, 1.0); }
+    </script>
 
-        <script id="saturn-fs" type="x-shader/x-fragment">
-            precision mediump float;
+    <script id="saturn-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(0.9, 0.6, 0.4, 1.0); }
+    </script>
 
-            void main(void) {
-                gl_FragColor = vec4(0.9, 0.6, 0.4, 1.0);
-            }
-        </script>
+    <script id="uranus-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(0.5, 0.7, 0.8, 1.0); }
+    </script>
 
-        <script id="uranus-fs" type="x-shader/x-fragment">
-            precision mediump float;
+    <script id="neptune-fs" type="x-shader/x-fragment">
+        precision mediump float; void main(void) { gl_FragColor = vec4(0.2, 0.4, 0.6, 1.0); }
+    </script>
 
-            void main(void) {
-                gl_FragColor = vec4(0.5, 0.7, 0.8, 1.0);
-            }
-        </script>
+    <script id="skybox-fs" type="x-shader/x-fragment">
+        precision mediump float; varying vec2 vTexCoord; uniform sampler2D sampler; void main(void) { gl_FragColor = texture2D(sampler, vec2(vTexCoord.s, vTexCoord.t)); gl_FragColor.rgb *= 0.2; }
+    </script>
 
-        <script id="neptune-fs" type="x-shader/x-fragment">
-            precision mediump float;
+    <script id="shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition; uniform mat4 uMVMatrix; uniform mat4 uPMatrix; float rand(vec2 co){ return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453); } void main(void) { vec4 pos = vec4(aVertexPosition, 1.0); pos.xyz += rand(vec2(-1000,
+        1000)); gl_Position = uPMatrix * uMVMatrix * pos; }
+    </script>
 
-            void main(void) {
-                gl_FragColor = vec4(0.2, 0.4, 0.6, 1.0);
-            }
-        </script>
-
-        <script id="skybox-fs" type="x-shader/x-fragment">
-            precision mediump float;
-
-            varying vec2 vTexCoord;
-
-            uniform sampler2D sampler;
-
-            void main(void) {
-                gl_FragColor = texture2D(sampler, vec2(vTexCoord.s, vTexCoord.t));
-                gl_FragColor.rgb *=  0.2;
-            }
-        </script>
-
-        <script id="shader-vs" type="x-shader/x-vertex">
-            attribute vec3 aVertexPosition;
-
-            uniform mat4 uMVMatrix;
-            uniform mat4 uPMatrix;
-
-            float rand(vec2 co){
-              return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-            }
-
-            void main(void) {
-                vec4 pos =  vec4(aVertexPosition, 1.0);
-                pos.xyz += rand(vec2(-1000, 1000));
-                gl_Position = uPMatrix * uMVMatrix * pos;
-            }
-        </script>
-
-        <script id="tex-shader-vs" type="x-shader/x-vertex">
-            attribute vec3 aVertexPosition;
-            attribute vec2 texCoord;
-
-            uniform mat4 uMVMatrix;
-            uniform mat4 uPMatrix;
-
-            varying vec2 vTexCoord;
-
-            void main(void) {
-                gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-                vTexCoord = texCoord;
-            }
-        </script>
+    <script id="tex-shader-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition; attribute vec2 texCoord; uniform mat4 uMVMatrix; uniform mat4 uPMatrix; varying vec2 vTexCoord; void main(void) { gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0); vTexCoord = texCoord; }
+    </script>
 
 
-        <script type="text/javascript">
-
+    <script type="text/javascript">
         function SetupPlanets() {
-          var sun = new Planet({position: {x: 0, y: 0, z: 0}, orbit: {x: 0, y: 0, z:0}, speed: 0});
-          var mercury = new Planet({position: {x: -226, y: 0, z: 0}, orbit: {x: 225, y: 225, z:0}, speed:3.33});
-          var venus = new Planet({position: {x: -254, y: 0, z: 0}, orbit: {x: 240, y: 240, z:0}, speed: 1.4});
-          var earth = new Planet({position: {x: -278, y: 0, z: -22}, orbit: {x: 250, y: 250, z:0}, speed: 1});
-          var mars = new Planet({position: {x: -296, y: 0, z: 0}, orbit: {x: 280, y: 280, z:0}, speed: 0.55});
-          var jupiter = new Planet({position: {x: -378, y: 0, z: 0}, orbit: {x: 350, y: 350, z:0}, speed: 0.083});
-          var saturn = new Planet({position: {x: -466, y: 0, z: 0}, orbit: {x: 450, y: 450, z:0}, speed: 0.034});
-          var uranus = new Planet({position: {x: -662, y: 0, z: 0}, orbit: {x: 600, y: 600, z:0}, speed: 0.0119});
-          var neptune = new Planet({position: {x: -879, y: 0, z: 0}, orbit: {x: 800, y: 800, z:0}, speed: 0.00605});
+            var sun = new Planet({
+                position: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                },
+                orbit: {
+                    x: 0,
+                    y: 0,
+                    z: 0
+                },
+                speed: 0
+            });
+            var mercury = new Planet({
+                position: {
+                    x: -226,
+                    y: 0,
+                    z: 0
+                },
+                orbit: {
+                    x: 225,
+                    y: 225,
+                    z: 0
+                },
+                speed: 3.33
+            });
+            var venus = new Planet({
+                position: {
+                    x: -254,
+                    y: 0,
+                    z: 0
+                },
+                orbit: {
+                    x: 240,
+                    y: 240,
+                    z: 0
+                },
+                speed: 1.4
+            });
+            var earth = new Planet({
+                position: {
+                    x: -278,
+                    y: 0,
+                    z: -22
+                },
+                orbit: {
+                    x: 250,
+                    y: 250,
+                    z: 0
+                },
+                speed: 1
+            });
+            var mars = new Planet({
+                position: {
+                    x: -296,
+                    y: 0,
+                    z: 0
+                },
+                orbit: {
+                    x: 280,
+                    y: 280,
+                    z: 0
+                },
+                speed: 0.55
+            });
+            var jupiter = new Planet({
+                position: {
+                    x: -378,
+                    y: 0,
+                    z: 0
+                },
+                orbit: {
+                    x: 350,
+                    y: 350,
+                    z: 0
+                },
+                speed: 0.083
+            });
+            var saturn = new Planet({
+                position: {
+                    x: -466,
+                    y: 0,
+                    z: 0
+                },
+                orbit: {
+                    x: 450,
+                    y: 450,
+                    z: 0
+                },
+                speed: 0.034
+            });
+            var uranus = new Planet({
+                position: {
+                    x: -662,
+                    y: 0,
+                    z: 0
+                },
+                orbit: {
+                    x: 600,
+                    y: 600,
+                    z: 0
+                },
+                speed: 0.0119
+            });
+            var neptune = new Planet({
+                position: {
+                    x: -879,
+                    y: 0,
+                    z: 0
+                },
+                orbit: {
+                    x: 800,
+                    y: 800,
+                    z: 0
+                },
+                speed: 0.00605
+            });
 
-          return [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
+            return [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
         }
 
-    var skybox;
-            //2 = 0.1AU
-    var planets = SetupPlanets();
+        var skybox;
+        //2 = 0.1AU
+        var planets = SetupPlanets();
 
         var gl;
+
         function initGL(canvas) {
             try {
                 gl = canvas.getContext("experimental-webgl");
                 gl.viewportWidth = canvas.width;
                 gl.viewportHeight = canvas.height;
-            } catch (e) {
-            }
+            } catch (e) {}
             if (!gl) {
                 alert("Could not initialise WebGL, sorry :-(");
             }
@@ -189,157 +226,159 @@
             var shaderScript = document.getElementById(id);
             if (!shaderScript) {
                 return null;
-        }
-
-        var str = "";
-        var k = shaderScript.firstChild;
-        while (k) {
-            if (k.nodeType == 3) {
-                str += k.textContent;
             }
-            k = k.nextSibling;
+
+            var str = "";
+            var k = shaderScript.firstChild;
+            while (k) {
+                if (k.nodeType == 3) {
+                    str += k.textContent;
+                }
+                k = k.nextSibling;
+            }
+
+            var shader;
+            if (shaderScript.type == "x-shader/x-fragment") {
+                shader = gl.createShader(gl.FRAGMENT_SHADER);
+            } else if (shaderScript.type == "x-shader/x-vertex") {
+                shader = gl.createShader(gl.VERTEX_SHADER);
+            } else {
+                return null;
+            }
+
+            gl.shaderSource(shader, str);
+            gl.compileShader(shader);
+
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                alert(gl.getShaderInfoLog(shader));
+                return null;
+            }
+
+            return shader;
         }
 
-        var shader;
-        if (shaderScript.type == "x-shader/x-fragment") {
-            shader = gl.createShader(gl.FRAGMENT_SHADER);
-        } else if (shaderScript.type == "x-shader/x-vertex") {
-            shader = gl.createShader(gl.VERTEX_SHADER);
-        } else {
-            return null;
+        function initShaders() {
+            sunshaderProgram = SetupShader("sun-fs", "shader-vs", false);
+            mercuryshaderProgram = SetupShader("mercury-fs", "shader-vs", false);
+            venusshaderProgram = SetupShader("venus-fs", "shader-vs", false);
+            earthshaderProgram = SetupShader("earth-fs", "shader-vs", false);
+            marsshaderProgram = SetupShader("mars-fs", "shader-vs", false);
+            jupitershaderProgram = SetupShader("jupiter-fs", "shader-vs", false);
+            saturnshaderProgram = SetupShader("saturn-fs", "shader-vs", false);
+            uranusshaderProgram = SetupShader("uranus-fs", "shader-vs", false);
+            neptuneshaderProgram = SetupShader("neptune-fs", "shader-vs", false);
+            skyboxshaderProgram = SetupShader("skybox-fs", "tex-shader-vs", true);
         }
 
-        gl.shaderSource(shader, str);
-        gl.compileShader(shader);
+        function SetupShader(fs_shader_name, vs_shader_name, UsesTexture) {
+            var fragmentShader = getShader(gl, fs_shader_name);
+            var vertexShader = getShader(gl, vs_shader_name);
 
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            alert(gl.getShaderInfoLog(shader));
-            return null;
+            var shaderProgram = gl.createProgram();
+            gl.attachShader(shaderProgram, vertexShader);
+            gl.attachShader(shaderProgram, fragmentShader);
+            gl.linkProgram(shaderProgram);
+
+            shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+
+            shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+            shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+
+            if (UsesTexture) {
+                shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "texCoord");
+                shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "sampler");
+            }
+
+            if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+                alert("Could not initialise shaders from within");
+            } else {
+                return shaderProgram;
+            }
         }
 
-        return shader;
-    }
 
-    function initShaders() {
-        sunshaderProgram = SetupShader("sun-fs", "shader-vs", false);
-        mercuryshaderProgram = SetupShader("mercury-fs", "shader-vs", false);
-        venusshaderProgram = SetupShader("venus-fs", "shader-vs", false);
-        earthshaderProgram = SetupShader("earth-fs", "shader-vs", false);
-        marsshaderProgram = SetupShader("mars-fs", "shader-vs", false);
-        jupitershaderProgram = SetupShader("jupiter-fs", "shader-vs", false);
-        saturnshaderProgram = SetupShader("saturn-fs", "shader-vs", false);
-        uranusshaderProgram = SetupShader("uranus-fs", "shader-vs", false);
-        neptuneshaderProgram = SetupShader("neptune-fs", "shader-vs", false);
-        skyboxshaderProgram = SetupShader("skybox-fs", "tex-shader-vs", true);
-    }
+        var mvMatrix = mat4.create();
+        var pMatrix = mat4.create();
 
-    function SetupShader(fs_shader_name, vs_shader_name, UsesTexture)
-    {
-      var fragmentShader = getShader(gl, fs_shader_name);
-      var vertexShader = getShader(gl, vs_shader_name);
+        function initBuffers() {
+            skybox = new Skybox();
+            skybox.Init();
+            //generates the verts, tex and indices buffers
+            skybox.generate();
+            skybox.shaderProgram = skyboxshaderProgram;
 
-      var shaderProgram = gl.createProgram();
-      gl.attachShader(shaderProgram, vertexShader);
-      gl.attachShader(shaderProgram, fragmentShader);
-      gl.linkProgram(shaderProgram);
+            planets[0].generate(218); //sun
+            planets[0].shaderProgram = sunshaderProgram;
 
-      shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+            planets[1].generate(0.6); //mercury 0.6
+            planets[1].shaderProgram = mercuryshaderProgram;
 
-      shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-      shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+            planets[2].generate(1.8); //venus 1.8
+            planets[2].shaderProgram = venusshaderProgram;
 
-      if (UsesTexture) {
-        shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "texCoord");
-        shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "sampler");
-      }
+            planets[3].generate(2); //earth 2
+            planets[3].shaderProgram = earthshaderProgram;
 
-      if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-          alert("Could not initialise shaders from within");
-      } else {
-        return shaderProgram;
-      }
-    }
+            planets[4].generate(1); //mars 1
+            planets[4].shaderProgram = marsshaderProgram;
+
+            planets[5].generate(22); //jupiter 22
+            planets[5].shaderProgram = jupitershaderProgram;
+
+            planets[6].generate(18); //saturn 18
+            planets[6].shaderProgram = saturnshaderProgram;
+
+            planets[7].generate(8); //uranus 8
+            planets[7].shaderProgram = uranusshaderProgram;
+
+            planets[8].generate(8); //neptune 8
+            planets[8].shaderProgram = neptuneshaderProgram;
+        }
 
 
-    var mvMatrix = mat4.create();
-    var pMatrix = mat4.create();
+        var time = 0;
+        var zoom = -2000;
+        var rotation = 1.57;
+        var clock_increment = 0.03;
 
-    function initBuffers() {
-        skybox = new Skybox();
-        skybox.Init();
-        //generates the verts, tex and indices buffers
-        skybox.generate();
-        skybox.shaderProgram = skyboxshaderProgram;
+        function drawScene() {
+            time += clock_increment;
+            gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        planets[0].generate(218); //sun
-        planets[0].shaderProgram = sunshaderProgram;
+            mat4.identity(mvMatrix);
+            mat4.translate(mvMatrix, [0, -10, zoom]);
+            mat4.rotate(mvMatrix, rotation, [1, 0, 0]);
+            mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 5000.0, pMatrix);
 
-        planets[1].generate(0.6); //mercury 0.6
-        planets[1].shaderProgram = mercuryshaderProgram;
+            //draw here
+            skybox.render(pMatrix, mvMatrix);
 
-        planets[2].generate(1.8); //venus 1.8
-        planets[2].shaderProgram = venusshaderProgram;
+            planets.forEach(function(curPlanet) {
+                curPlanet.orbit(time);
+                curPlanet.draw(pMatrix, mvMatrix);
+            });
+        }
 
-        planets[3].generate(2); //earth 2
-        planets[3].shaderProgram = earthshaderProgram;
+        function start() {
+            var canvas = document.getElementById("canvas");
+            initGL(canvas);
+            initShaders();
+            initBuffers();
 
-        planets[4].generate(1); //mars 1
-        planets[4].shaderProgram = marsshaderProgram;
+            var controller = new Controller();
 
-        planets[5].generate(22); //jupiter 22
-        planets[5].shaderProgram = jupitershaderProgram;
+            gl.clearColor(0.0, 0.0, 0.0, 1.0);
+            gl.enable(gl.DEPTH_TEST);
 
-        planets[6].generate(18); //saturn 18
-        planets[6].shaderProgram = saturnshaderProgram;
+            setInterval("drawScene();", 30);
+        }
+    </script>
+</head>
 
-        planets[7].generate(8); //uranus 8
-        planets[7].shaderProgram = uranusshaderProgram;
+<body onLoad="start();" style="margin: 0; padding: 0;">
+    <audio src="./audio/music.mp3" loop controls></audio>
+    <canvas id="canvas" width="800" height="600"></canvas>
+</body>
 
-        planets[8].generate(8); //neptune 8
-        planets[8].shaderProgram = neptuneshaderProgram;
-    }
-
-
-    var time = 0;
-    var zoom = -2000;
-    var rotation = 1.57;
-    var clock_increment = 0.03;
-    function drawScene() {
-        time += clock_increment;
-        gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        mat4.identity(mvMatrix);
-        mat4.translate(mvMatrix, [0, -10, zoom]);
-        mat4.rotate(mvMatrix, rotation, [1,0,0]);
-        mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 5000.0, pMatrix);
-
-        //draw here
-        skybox.render(pMatrix, mvMatrix);
-
-        planets.forEach(function(curPlanet) {
-          curPlanet.orbit(time);
-          curPlanet.draw(pMatrix, mvMatrix);
-        });
-    }
-
-    function start() {
-        var canvas = document.getElementById("canvas");
-        initGL(canvas);
-        initShaders();
-        initBuffers();
-
-	      var controller = new Controller();
-
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.enable(gl.DEPTH_TEST);
-
-        setInterval("drawScene();", 30);
-    }
-</script>
-    </head>
-    <body onLoad="start();" style="margin: 0; padding: 0;">
-        <audio src="./audio/music.mp3" loop controls></audio>
-        <canvas id="canvas"  width="800" height="600"></canvas>
-    </body>
 </html>
