@@ -9,12 +9,12 @@ function Controller() {
         mouseDown = false;
     })
 
-    var senstivity = 0.01;
+    var senstivity = 0.00001;
     var DOUBLE_PI = 6.28;
     jQuery(window).mousemove(function(e) {
         if (mouseDown) {
-            yRotation = ((-2000 + e.pageY) * senstivity) % (DOUBLE_PI);
-            xRotation = ((-2000 + e.pageX) * senstivity) % (DOUBLE_PI);
+            yRotation += ((-2000 + e.pageY) * senstivity) % (DOUBLE_PI);
+            xRotation += ((-2000 + e.pageX) * senstivity) % (DOUBLE_PI);
         }
     });
 
