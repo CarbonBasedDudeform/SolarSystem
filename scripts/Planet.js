@@ -9,7 +9,7 @@ function Planet(settings) {
     this._orbitZ = settings.orbit.y;
     this._orbitY = settings.orbit.z;
     this._speed = settings.speed;
-
+		this._noise = settings.noise;
     this.setSpeed = function(v) {
         this._speed = v;
     }
@@ -44,9 +44,9 @@ function Planet(settings) {
                 var normalizedX = that.Normalize(coords[0], dist);
                 var normalizedY = that.Normalize(coords[1], dist);
                 var normalizedZ = that.Normalize(coords[2], dist);
-                result.push(normalizedX * radius);
-                result.push(normalizedY * radius);
-                result.push(normalizedZ * radius);
+                result.push(normalizedX * (radius+noise));
+                result.push(normalizedY * (radius+noise));
+                result.push(normalizedZ * (radius+noise));
             } else {
                 result = coords;
             }
@@ -72,8 +72,8 @@ function Planet(settings) {
 
         for (var i = 0; i < verts.length; i += patchSize) {
             //bottom left triangle
-            var left = [verts[i + 3], verts[i + 4], verts[i + 5]];
             var top = [verts[i], verts[i + 1], verts[i + 2]];
+						var left = [verts[i + 3], verts[i + 4], verts[i + 5]];
             var right = [verts[i + 6], verts[i + 7], verts[i + 8]];
 
             RecalcProc(left);
@@ -81,12 +81,12 @@ function Planet(settings) {
             RecalcProcHalf(left, right);
             RecalcProcHalf(left, top);
 
-            RecalcProc(top);
+						RecalcProc(top);
             RecalcProcHalf(top, right);
             RecalcProcHalf(left, right);
             RecalcProcHalf(top, right);
 
-            RecalcProc(right);
+						RecalcProc(right);
             RecalcProcHalf(left, top);
             RecalcProcHalf(top, right);
             RecalcProcHalf(left, right);
@@ -114,39 +114,44 @@ function Planet(settings) {
         //face 1 - forward facing
         0.0, 1.0, 0.0, -1.0, -1.0, -1.0,
         1.0, -1.0, -1.0,
-        //face 2 - right side facing
+				//face 2 - right side facing
         1.0, -1.0, -1.0,
         1.0, -1.0, 1.0,
         0.0, 1.0, 0.0,
-        //face 3 - left side facing
+				//face 3 - left side facing
         -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
         0.0, 1.0, 0.0,
         //face 4 - rear side facing
         0.0, 1.0, 0.0, -1.0, -1.0, 1.0,
         1.0, -1.0, 1.0,
 
-        //reflect in y-axis
+				//reflect in y-axis
         //face 1 - forward facing
-        0.0, -3.0, 0.0, -1.0, -1.0, -1.0,
+        0.0, -1.0, 0.0,
+				-1.0, -1.0, -1.0,
         1.0, -1.0, -1.0,
         //face 2 - right side facing
         1.0, -1.0, -1.0,
         1.0, -1.0, 1.0,
-        0.0, -3.0, 0.0,
+        0.0, -1.0, 0.0,
         //face 3 - left side facing
-        -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
-        0.0, -3.0, 0.0,
-        //face 4 - rear side facing
-        0.0, -3.0, 0.0, -1.0, -1.0, 1.0,
-        1.0, -1.0, 1.0
+        -1.0, -1.0, -1.0,
+				-1.0, -1.0, 1.0,
+        0.0, -1.0, 0.0,
+				//face 4 - rear side facing
+        0.0, -1.0, 0.0,
+				-1.0, -1.0, 1.0,
+        1.0, -1.0, 1.0,
     ];
 
-    var _tessellationDepth = 5;
+    var _tessellationDepth = 8;
     var _radius = 1;
 
+		var noise = Math.random() * this._noise;
     this.generate = function(radius) {
         _buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, _buffer);
+
 
         for (var i = 0; i < _tessellationDepth; i++) {
             _vertices = this.CreateSphere(_vertices, radius);
@@ -172,7 +177,7 @@ function Planet(settings) {
 
     this.shaderProgram;
 
-    this.draw = function(pMatrix, mvMatrix) {
+    this.draw = function(pMatrix, mvMatrix, t) {
         gl.useProgram(this.shaderProgram);
         gl.enableVertexAttribArray(this.shaderProgram.vertexPositionAttribute);
         mat4.translate(mvMatrix, [this.worldX, this.worldY, this.worldZ]);
@@ -180,6 +185,12 @@ function Planet(settings) {
         gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, _buffer.itemSize, gl.FLOAT, false, 0, 0);
         gl.uniformMatrix4fv(this.shaderProgram.pMatrixUniform, false, pMatrix);
         gl.uniformMatrix4fv(this.shaderProgram.mvMatrixUniform, false, mvMatrix);
+
+				var time = gl.getUniformLocation(this.shaderProgram, "uTime");
+				gl.uniform1f(time, t);
+				var centre = gl.getUniformLocation(this.shaderProgram, "uCentre");
+				gl.uniform3fv(centre, [this.worldX, this.worldY, this.worldZ]);
+
         gl.drawArrays(gl.TRIANGLES, 0, _buffer.numItems);
         mat4.translate(mvMatrix, [-this.worldX, -this.worldY, -this.worldZ]);
 
