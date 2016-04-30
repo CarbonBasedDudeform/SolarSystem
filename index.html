@@ -360,8 +360,8 @@
         varying vec3 vPos;
         void main(void) {
           vec4 pos = vec4(aVertexPosition, 1.0);
-          displacement = (cnoise(pos.xyz)*cnoise(vec3(uTime)))*5.0;
-          pos.xyz += displacement;
+          displacement = (cnoise(pos.xyz)*cnoise(vec3(uTime)))*0.1;
+          pos.xyz *= 1.0 + displacement;
           vPos = pos.xyz;
           gl_Position = uPMatrix * uMVMatrix * pos;
         }
